@@ -1,0 +1,58 @@
+---
+import { Image } from 'astro:assets';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import '../styles/global.css';
+import '../styles/markdown.css';
+
+const { title, description, publishDate, updatedDate, heroImage } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+
+	<body class="bg-white">
+		<Header />
+		<main>
+			<article class="max-w-4xl mx-auto px-4 py-8">
+				{heroImage && (
+					<div class="mb-8">
+						<Image 
+							width={1020} 
+							height={510} 
+							src={heroImage} 
+							alt="" 
+							class="w-full rounded-lg shadow-lg"
+							loading="eager"
+							decoding="async"
+							format="avif"
+							quality={70}
+						/>
+					</div>
+				)}
+				<div class="prose prose-lg mx-auto">
+					<header class="mb-8 text-center">
+						<time class="text-gray-700 text-sm">
+							<FormattedDate date={publishDate} />
+						</time>
+						{updatedDate && (
+							<div class="text-gray-700 text-sm italic mt-1">
+								最終更新: <FormattedDate date={updatedDate} />
+							</div>
+						)}
+						<h1 class="text-4xl font-bold mt-2 mb-4 text-gray-900">{title}</h1>
+						<hr class="my-4 border-gray-300" />
+					</header>
+					<div class="mt-8 markdown-content">
+						<slot />
+					</div>
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>

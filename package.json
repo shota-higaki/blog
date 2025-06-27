@@ -1,0 +1,38 @@
+{
+	"name": "personal-blog",
+	"type": "module",
+	"version": "0.0.1",
+	"engines": {
+		"bun": ">=1.2.0"
+	},
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"check": "biome check --write",
+		"check:ci": "biome check --error-on-warnings",
+		"format": "biome format --write",
+		"format:check": "biome format",
+		"lint": "biome lint --write",
+		"typecheck": "astro check",
+		"test": "playwright test",
+		"test:ui": "playwright test --ui",
+		"test:headed": "playwright test --headed",
+		"ci": "bun scripts/ci.ts"
+	},
+	"dependencies": {
+		"@astrojs/mdx": "^4.3.0",
+		"@astrojs/rss": "^4.0.12",
+		"@astrojs/sitemap": "^3.4.1",
+		"@tailwindcss/typography": "^0.5.16",
+		"@tailwindcss/vite": "^4.1.11",
+		"astro": "^5.10.1",
+		"tailwindcss": "^4.1.11"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.0.6",
+		"@playwright/test": "^1.53.1",
+		"axe-playwright": "^2.1.0"
+	}
+}

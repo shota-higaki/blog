@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+:root {
+	--font-body:
+		-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+		"Helvetica Neue", sans-serif;
+	--font-mono: "Menlo", "Monaco", "Courier New", monospace;
+	--black: 15, 18, 25;
+	--gray: 96, 115, 159;
+	--gray-light: 229, 233, 240;
+	--gray-dark: 34, 41, 57;
+	--gray-gradient: linear-gradient(45deg, #323741, #414651);
+	--accent: 117, 99, 240;
+	--accent-light: 138, 123, 244;
+	--accent-dark: 74, 63, 190;
+	--accent-gradient: linear-gradient(45deg, #4a3fbe, #6e5ec2, #8a7bf4);
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	flex: 1;
+}
+
+code {
+	padding: 0.125rem 0.25rem;
+	border-radius: 0.25rem;
+	background-color: #f3f4f6;
+}
+
+pre code {
+	padding: 0;
+	background-color: transparent;
+}
+
+pre {
+	padding: 1rem;
+	border-radius: 0.5rem;
+	overflow-x: auto;
+}
