@@ -1,8 +1,11 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Homepage', () => {
-	test('should load the homepage', async ({ page }) => {
+	test('should load the homepage and redirect to articles', async ({ page }) => {
 		await page.goto('/');
+		
+		// Wait for redirect to articles page
+		await page.waitForURL('**/articles/');
 
 		// Check title
 		await expect(page).toHaveTitle(/Code & Living/);
@@ -10,6 +13,7 @@ test.describe('Homepage', () => {
 		// Check main heading exists
 		const heading = page.locator('h1');
 		await expect(heading).toBeVisible();
+		await expect(heading).toContainText('Articles');
 
 		// Check navigation
 		const nav = page.locator('nav');
@@ -42,6 +46,9 @@ test.describe('Homepage', () => {
 		// Desktop view
 		await page.setViewportSize({ width: 1200, height: 800 });
 		await page.goto('/');
+		
+		// Wait for redirect
+		await page.waitForURL('**/articles/');
 
 		// Check desktop layout
 		const main = page.locator('main');

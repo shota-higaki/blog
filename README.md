@@ -15,7 +15,6 @@ Astroで構築した個人ブログです。GitHub Pagesでホスティングさ
 - ⏰ 予約投稿機能（publishDateによる公開日時制御）
 - 📱 レスポンシブデザイン
 - ⚡ ローカルCIによる品質チェック（並列実行）
-- 📴 Service Workerによるオフライン対応
 
 ## 動作環境
 
@@ -48,7 +47,7 @@ bun run dev
 ---
 title: '記事タイトル'
 description: '記事の説明'
-pubDate: 2024-06-28
+publishDate: 2024-06-28
 publishDate: 2024-07-01  # 予約投稿の場合（オプション）
 ---
 
@@ -57,10 +56,9 @@ publishDate: 2024-07-01  # 予約投稿の場合（オプション）
 
 ## URL構造
 
-- `/blog/` - ホームページ
+- `/blog/` - ホームページ（記事一覧へリダイレクト）
 - `/blog/articles/` - 記事一覧
 - `/blog/articles/[slug]/` - 個別記事
-- `/blog/about/` - Aboutページ
 
 ## コマンド一覧
 
@@ -79,7 +77,7 @@ publishDate: 2024-07-01  # 予約投稿の場合（オプション）
 
 ## デプロイ
 
-手動でビルドしてGitHub Pagesにデプロイする必要があります。
+GitHub Actionsにより、mainブランチへのプッシュ時に自動でデプロイされます。
 
 ## 予約投稿
 

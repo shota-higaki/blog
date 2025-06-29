@@ -6,25 +6,25 @@
 
 2. **Pages** セクションへ移動
 
-3. **Source** で「Deploy from a branch」を選択
+3. **Source** で「GitHub Actions」を選択
 
-4. **Branch** で`gh-pages`を選択（または適切なブランチ）
+## デプロイ方法
 
-## 初回デプロイ
+### 自動デプロイ（GitHub Actions）
 
-1. ビルドを実行
+mainブランチにプッシュすると自動的にビルドとデプロイが実行されます：
+
 ```bash
-bun run build
+# 変更をコミットしてプッシュ
+git add .
+git commit -m "記事を追加"
+git push origin main
 ```
 
-2. ビルドされたファイルをGitHub Pages用ブランチにデプロイ
-   - `dist`ディレクトリの内容を`gh-pages`ブランチにプッシュ
-   - または、手動でビルドファイルをアップロード
-
-3. デプロイ完了後、以下のURLでアクセス可能になります：
-   ```
-   https://shota-higaki.github.io/blog/
-   ```
+デプロイ完了後、以下のURLでアクセス可能になります：
+```
+https://shota-higaki.github.io/blog/
+```
 
 ## 注意事項
 
@@ -34,8 +34,8 @@ bun run build
 ## トラブルシューティング
 
 ### ページが404エラーの場合
-1. Settings → Pages で正しいSourceとBranchが選択されているか確認
-2. ビルドファイルが正しくデプロイされているか確認
+1. Settings → Pages でSourceが「GitHub Actions」になっているか確認
+2. GitHub Actionsのワークフローが正常に完了しているか確認
 3. URLが正しいか確認（/blog/のパスが必要）
 
 ### ビルドエラーの場合

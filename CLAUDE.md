@@ -42,7 +42,7 @@
    ---
    title: '記事タイトル'
    description: '記事の説明'
-   pubDate: 2024-06-28
+   publishDate: 2024-06-28
    publishDate: 2024-07-01  # 予約投稿する場合
    ---
    ```
