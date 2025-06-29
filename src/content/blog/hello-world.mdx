@@ -35,7 +35,7 @@ AI による文章生成がより便利になる中で、むしろ「**自分の
 
 ## このブログの技術スタック
 
-以下の技術スタックで構築されている：
+以下の技術スタックで構築されている。
 
 | 技術 | 用途 | 選定理由 |
 | --- | --- | --- |
@@ -57,7 +57,7 @@ AI による文章生成がより便利になる中で、むしろ「**自分の
 
 ## 開発の過程でClaude Codeをどのように利用したか
 
-最初は「GitHub Pagesでブログを作りたい」という漠然とした要望から、以下のような過程を経て完成に至った：
+最初は「GitHub Pagesでブログを作りたい」という漠然とした要望から、以下のような過程を経て完成に至った。
 
 ### 1. 初期セットアップ
 
@@ -68,7 +68,7 @@ bun create astro@latest
 
 ### 2. ローカルでのCI/CDの実行環境の整備
 
-途中でGitHub Actionsの無料枠を超過したため、ローカル環境でCIを実行する仕組みを構築してもらった：
+途中でGitHub Actionsの無料枠を超過したため、ローカル環境でCIを実行する仕組みを構築してもらった。
 
 ```bash
 # 並列実行でタスクを高速化
@@ -86,7 +86,7 @@ bun run ci
 
 ### 3. 不要な機能の削除とシンプル化
 
-開発を進める中で、以下の機能を削除してシンプルにした：
+開発を進める中で、以下の機能を削除してシンプルにした。
 - PWA機能（Service Worker、オフライン対応）
 - 不要なパッケージ（sharp、marked）
 - 複雑なE2Eテスト（シンプルなページ遷移確認のみに）
@@ -96,7 +96,7 @@ bun run ci
 
 ### 4. ブログ名の決定
 
-Claude Codeが提案した候補から「**Code & Living**」を選択：
+Claude Codeが提案した候補から「**Code & Living**」を選択した。
 - Tech Craft Lab
 - Simple Dev Notes
 - Build & Learn
@@ -111,9 +111,9 @@ Claude Codeが提案した候補から「**Code & Living**」を選択：
 
 ## MCP（Model Context Protocol）の活用
 
-このブログの開発では「Playwright MCP」を活用した：
+このブログの開発では「Playwright MCP」を活用した。
 
-Playwright MCPのインストールと利用例：
+Playwright MCPのインストールと利用例は以下の通り。
 
 ```bash
 # Playwright MCPのインストール
@@ -132,7 +132,7 @@ claude mcp add playwright npx @playwright/mcp@latest
 
 ## Claude Code上でのGitHub CLIの実行
 
-[GitHub CLI（gh）](https://docs.github.com/ja/github-cli/github-cli/about-github-cli)との連携により、通常のgitコマンドでは実現できない以下のGitHub特有の操作が可能だった：
+[GitHub CLI（gh）](https://docs.github.com/ja/github-cli/github-cli/about-github-cli)との連携により、通常のgitコマンドでは実現できない以下のGitHub特有の操作が可能だった。
 
 - **リポジトリの作成**: `gh repo create` でGitHubリポジトリを作成
 - **Pull Requestの作成**: `gh pr create` でPRを作成
