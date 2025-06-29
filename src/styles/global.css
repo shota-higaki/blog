@@ -46,3 +46,14 @@ pre {
 	border-radius: 0.5rem;
 	overflow-x: auto;
 }
+
+/* Shiki syntax highlighting - コメントのコントラストを改善 */
+.astro-code.github-dark {
+	/* コメントの色をより明るくしてコントラストを向上 */
+	--astro-code-color-comment: #8b949e;
+}
+
+/* Shikiのコメントスタイルを上書き */
+.astro-code span[style*="color:#6A737D"] {
+	color: #8b949e !important;
+}
