@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Homepage', () => {
 	test('should load the homepage and redirect to articles', async ({ page }) => {
 		await page.goto('/');
-		
+
 		// Wait for redirect to articles page
 		await page.waitForURL('**/articles/');
 
@@ -46,7 +46,7 @@ test.describe('Homepage', () => {
 		// Desktop view
 		await page.setViewportSize({ width: 1200, height: 800 });
 		await page.goto('/');
-		
+
 		// Wait for redirect
 		await page.waitForURL('**/articles/');
 

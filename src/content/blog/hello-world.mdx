@@ -130,13 +130,13 @@ claude mcp add playwright npx @playwright/mcp@latest
 
 [GitHub CLI（gh）](https://docs.github.com/ja/github-cli/github-cli/about-github-cli)との連携により、通常のgitコマンドでは実現できない以下のGitHub特有の操作が可能だった：
 
-- **リポジトリの作成**: `gh repo create` でローカルからGitHubリポジトリを直接作成
-- **Pull Requestの作成**: `gh pr create` でコマンドラインからPRを作成・管理
+- **リポジトリの作成**: `gh repo create` でGitHubリポジトリを作成
+- **Pull Requestの作成**: `gh pr create` でPRを作成
 - **GitHub Actionsの状態確認**: `gh run list` でワークフローの実行状態を確認
 
 また本ブログ開発では利用しなかったが、別リポジトリでは以下の操作も行なっていたので備忘録として記載しておく。
 
-- **Issueの管理**: `gh issue create/list` でIssueの作成や一覧表示
+- **Issueの管理**: `gh issue` でIssueの作成や更新、削除
 - **PRレビューコメントへの対応**: Gemini Code Reviewからの指摘の修正・返信やレビューコメントのステータスの一括更新(resolve/outdatedなど)。
 - **リリースの作成**: `gh release create` でタグ付けとリリースノートを同時に作成
 

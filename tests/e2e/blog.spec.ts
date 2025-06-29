@@ -63,7 +63,7 @@ test.describe('Blog functionality', () => {
 		await expect(page.locator('pre').first()).toBeVisible();
 		await expect(page.locator('code').first()).toBeVisible();
 
-		// Links  
+		// Links
 		const link = page.locator('a[href*="astro.build"]');
 		await expect(link).toBeVisible();
 
