@@ -75,14 +75,14 @@ bun create astro@latest
 bun run ci
 ```
 
-実際の実行結果はこのような見た目：
-
-![セルフCI実行結果](/blog/ci-demo.svg)
-
 - typecheck、lint、format、testを並列実行
 - タイムアウト設定時間を短くし、Claude Codeへのフィードバックを効率化した
 - 視覚的な実行結果表示（✓/✗、実行時間、エラー詳細）
 - `--skip` や `--only` オプションで柔軟な実行制御
+
+実際の実行結果はこのような見た目：
+
+![セルフCI実行結果](/blog/ci-demo.svg)
 
 ### 3. 不要な機能の削除とシンプル化
 
