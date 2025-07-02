@@ -2,10 +2,10 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Homepage', () => {
 	test('should load the homepage and redirect to articles', async ({ page }) => {
-		await page.goto('/');
+		await page.goto('/blog/');
 
 		// Wait for redirect to articles page
-		await page.waitForURL('**/articles/');
+		await page.waitForURL('**/blog/articles/');
 
 		// Check title
 		await expect(page).toHaveTitle(/Code & Living/);
@@ -23,32 +23,38 @@ test.describe('Homepage', () => {
 		const footer = page.locator('footer');
 		await expect(footer).toBeVisible();
 
-		// Check CSS is loaded
-		const main = page.locator('main');
-		const mainBg = await main.evaluate((el) => window.getComputedStyle(el).backgroundColor);
-		expect(mainBg).not.toBe('rgba(0, 0, 0, 0)');
+		// Check CSS is loaded by verifying that body has a background color
+		const body = page.locator('body');
+		const bodyBg = await body.evaluate((el) => window.getComputedStyle(el).backgroundColor);
+		// Body should have a background color (not transparent)
+		expect(bodyBg).not.toBe('rgba(0, 0, 0, 0)');
 	});
 
-	test('should navigate to blog page', async ({ page }) => {
-		await page.goto('/');
+	test('should navigate to a blog post', async ({ page }) => {
+		await page.goto('/blog/');
 
-		// Click blog link
-		await page.click('a[href="/articles/"]');
+		// Wait for redirect to articles page
+		await page.waitForURL('**/blog/articles/');
 
-		// Wait for navigation
-		await page.waitForURL('**/articles/');
+		// Click first blog post link
+		const firstPostLink = page.locator('article a').first();
+		await firstPostLink.click();
 
-		// Check we're on blog page
-		await expect(page.locator('h1')).toContainText('Articles');
+		// Wait for navigation to a specific blog post
+		await page.waitForURL('**/blog/articles/**/');
+
+		// Check we're on a blog post page (should have article content)
+		const article = page.locator('article');
+		await expect(article).toBeVisible();
 	});
 
 	test('should have responsive design', async ({ page }) => {
 		// Desktop view
 		await page.setViewportSize({ width: 1200, height: 800 });
-		await page.goto('/');
+		await page.goto('/blog/');
 
 		// Wait for redirect
-		await page.waitForURL('**/articles/');
+		await page.waitForURL('**/blog/articles/');
 
 		// Check desktop layout
 		const main = page.locator('main');

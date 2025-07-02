@@ -3,21 +3,21 @@ import { injectAxe, checkA11y } from 'axe-playwright';
 
 test.describe('Accessibility', () => {
 	test('homepage should not have accessibility violations', async ({ page }) => {
-		await page.goto('/');
+		await page.goto('/blog/');
 		// Wait for redirect to articles page
-		await page.waitForURL('**/articles/');
+		await page.waitForURL('**/blog/articles/');
 		await injectAxe(page);
 		await checkA11y(page);
 	});
 
 	test('articles page should not have accessibility violations', async ({ page }) => {
-		await page.goto('/articles/');
+		await page.goto('/blog/articles/');
 		await injectAxe(page);
 		await checkA11y(page);
 	});
 
 	test('blog post should not have accessibility violations', async ({ page }) => {
-		await page.goto('/articles/hello-world.mdx/');
+		await page.goto('/blog/articles/hello-world.mdx/');
 		await injectAxe(page);
 		// Check with reduced rules to avoid task list label issues
 		await checkA11y(page, undefined, {
@@ -31,7 +31,7 @@ test.describe('Accessibility', () => {
 	// ホームページはリダイレクトのみなのでheading hierarchyテストは削除
 
 	test('images should have alt text', async ({ page }) => {
-		await page.goto('/articles/');
+		await page.goto('/blog/articles/');
 
 		const images = page.locator('img');
 		const imageCount = await images.count();
@@ -44,7 +44,9 @@ test.describe('Accessibility', () => {
 	});
 
 	test('links should be distinguishable', async ({ page }) => {
-		await page.goto('/');
+		await page.goto('/blog/');
+		// Wait for redirect to complete
+		await page.waitForURL('**/blog/articles/');
 
 		const links = page.locator('a');
 		const linkCount = await links.count();
