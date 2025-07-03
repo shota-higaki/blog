@@ -33,10 +33,10 @@ export default defineConfig({
 
 	// 画像最適化設定
 	image: {
-		// AVIF形式を追加
-		formats: ['avif', 'webp'],
-		// 画像品質を調整（70%でも十分な品質）
-		quality: 70,
+		// WebP形式を優先（AVIF はサポートが限定的）
+		formats: ['webp'],
+		// 画像品質を調整（80%で良好な品質を維持）
+		quality: 80,
 	},
 
 	// ビルド最適化

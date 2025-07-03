@@ -27,10 +27,10 @@ const { title, description, publishDate, updatedDate, heroImage } = Astro.props;
 							src={heroImage} 
 							alt="" 
 							class="w-full rounded-lg shadow-lg"
-							loading="eager"
+							loading="lazy"
 							decoding="async"
-							format="avif"
-							quality={70}
+							format="webp"
+							quality={80}
 						/>
 					</div>
 				)}

@@ -11,6 +11,34 @@ interface Props {
 
 const { title, description } = Astro.props;
 const ogImage = 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
+
+// Critical CSS for above-the-fold content
+const criticalCSS = `
+:root {
+	--font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+	--font-mono: "Menlo", "Monaco", "Courier New", monospace;
+	--black: 15, 18, 25;
+	--gray: 96, 115, 159;
+	--gray-light: 229, 233, 240;
+	--gray-dark: 34, 41, 57;
+	--accent: 117, 99, 240;
+}
+html {
+	scroll-behavior: smooth;
+}
+body {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	font-family: var(--font-body);
+	color: rgb(var(--gray-dark));
+	background-color: #fff;
+}
+main {
+	flex: 1;
+}
+`;
 ---
 
 <!-- Global Metadata -->
@@ -26,7 +54,12 @@ const ogImage = 'https://github.githubassets.com/images/modules/logos_page/GitHu
 />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Font preloads and Service Worker removed - not needed for this minimal blog -->
+<!-- Critical CSS inline -->
+<style set:html={criticalCSS}></style>
+
+<!-- Font preloads for better performance -->
+<link rel="preload" href="/blog/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
+<link rel="preload" href="/blog/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
