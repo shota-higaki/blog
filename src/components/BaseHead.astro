@@ -3,6 +3,7 @@
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
 import { SITE_TITLE } from '../consts';
+import StructuredData from './StructuredData.astro';
 
 interface Props {
 	title: string;
@@ -83,3 +84,6 @@ main {
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={ogImage} />
+
+<!-- Structured Data -->
+<StructuredData type="website" />

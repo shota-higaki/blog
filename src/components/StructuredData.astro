@@ -1,0 +1,90 @@
+---
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+interface Props {
+	type: 'website' | 'article' | 'breadcrumb';
+	title?: string;
+	description?: string;
+	publishDate?: Date;
+	updatedDate?: Date;
+	author?: string;
+	breadcrumbItems?: Array<{ name: string; url: string }>;
+}
+
+const {
+	type,
+	title,
+	description,
+	publishDate,
+	updatedDate,
+	author = '樋垣 将太',
+	breadcrumbItems,
+} = Astro.props;
+
+let structuredData: any = {};
+
+// WebSite構造化データ
+if (type === 'website') {
+	structuredData = {
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: SITE_TITLE,
+		description: SITE_DESCRIPTION,
+		url: Astro.site?.toString(),
+		potentialAction: {
+			'@type': 'SearchAction',
+			target: {
+				'@type': 'EntryPoint',
+				urlTemplate: `${Astro.site}search?q={search_term_string}`,
+			},
+			'query-input': 'required name=search_term_string',
+		},
+	};
+}
+
+// Article構造化データ
+if (type === 'article' && title && publishDate) {
+	structuredData = {
+		'@context': 'https://schema.org',
+		'@type': 'BlogPosting',
+		headline: title,
+		description: description,
+		author: {
+			'@type': 'Person',
+			name: author,
+		},
+		datePublished: publishDate.toISOString(),
+		dateModified: (updatedDate || publishDate).toISOString(),
+		publisher: {
+			'@type': 'Organization',
+			name: SITE_TITLE,
+			logo: {
+				'@type': 'ImageObject',
+				url: `${Astro.site}favicon.svg`,
+			},
+		},
+		mainEntityOfPage: {
+			'@type': 'WebPage',
+			'@id': Astro.url.toString(),
+		},
+	};
+}
+
+// BreadcrumbList構造化データ
+if (type === 'breadcrumb' && breadcrumbItems) {
+	structuredData = {
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: breadcrumbItems.map((item, index) => ({
+			'@type': 'ListItem',
+			position: index + 1,
+			name: item.name,
+			item: item.url,
+		})),
+	};
+}
+---
+
+{Object.keys(structuredData).length > 0 && (
+	<script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+)}

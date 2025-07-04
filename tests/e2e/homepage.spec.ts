@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.describe('Homepage', () => {
 	test('should load the homepage and redirect to articles', async ({ page }) => {

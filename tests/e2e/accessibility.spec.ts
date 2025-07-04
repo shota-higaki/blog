@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { injectAxe, checkA11y } from 'axe-playwright';
+import { expect, test } from '@playwright/test';
+import { checkA11y, injectAxe } from 'axe-playwright';
 
 test.describe('Accessibility', () => {
 	test('homepage should not have accessibility violations', async ({ page }) => {

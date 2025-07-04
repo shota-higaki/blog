@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.describe('Blog functionality', () => {
 	test('should display blog posts list', async ({ page }) => {
