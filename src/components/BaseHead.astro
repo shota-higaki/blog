@@ -58,9 +58,7 @@ main {
 <!-- Critical CSS inline -->
 <style set:html={criticalCSS}></style>
 
-<!-- Font preloads for better performance -->
-<link rel="preload" href="/blog/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
-<link rel="preload" href="/blog/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+<!-- Font preloads removed - fonts are not being used in CSS -->
 
 <!-- Canonical URL -->
 <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
