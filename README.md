@@ -35,9 +35,6 @@ bun install
 bun run dev
 ```
 
-### 3. GitHub Pagesの設定
-
-詳細は[SETUP-GITHUB-PAGES.md](./SETUP-GITHUB-PAGES.md)を参照してください。
 
 ## 記事の作成
 

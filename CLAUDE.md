@@ -10,7 +10,7 @@
 
 ## ページ構成
 
-- `/blog/` - ホームページ
+- `/blog/` - ホームページ（記事一覧へリダイレクト）
 - `/blog/articles/` - 記事一覧ページ
 - `/blog/articles/[slug]/` - 個別記事ページ
 - `/blog/about/` - Aboutページ
@@ -43,7 +43,7 @@
    title: '記事タイトル'
    description: '記事の説明'
    publishDate: 2024-06-28
-   publishDate: 2024-07-01  # 予約投稿する場合
+   publishDate: 2024-07-01  # 予約投稿する場合（オプション）
    ---
    ```
 
@@ -61,7 +61,7 @@
 
 ### デプロイ
 
-- 手動でビルドしてGitHub Pagesにデプロイ
+- GitHub Actionsにより、mainブランチへのプッシュ時に自動でデプロイされます
 
 ## コマンド一覧
 
@@ -96,4 +96,5 @@ bun run ci
 
 ## 注意事項
 
-- GitHub Pagesの設定でSourceを適切に設定する必要があります
+- 記事執筆のガイドラインは[writing-guidelines.md](./docs/writing-guidelines.md)を参照してください
+- パフォーマンス最適化については常に考慮し、Lighthouseスコアを維持してください
