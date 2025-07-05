@@ -23,7 +23,14 @@ const EXCLUDED_DIRS = [
 	'playwright-report',
 ];
 
-const ALLOWED_FILES = ['.env.local.example', '.env.example', 'README.md', 'CLAUDE.md', 'docs/'];
+const ALLOWED_FILES = [
+	'.env.local',
+	'.env.local.example',
+	'.env.example',
+	'README.md',
+	'CLAUDE.md',
+	'docs/',
+];
 
 async function* walkFiles(dir: string): AsyncGenerator<string> {
 	const entries = await readdir(dir, { withFileTypes: true });
