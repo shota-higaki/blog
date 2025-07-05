@@ -32,11 +32,18 @@ const tasks: Task[] = [
 	{ name: 'typecheck', command: 'bun run typecheck', timeout: 10000 }, // 10秒
 	{ name: 'lint', command: 'bun run lint', timeout: 10000 }, // 10秒
 	{ name: 'format', command: 'bun run format:check', timeout: 5000 }, // 5秒
+	{ name: 'test:unit', command: 'bun run test:unit', timeout: 20000 }, // 20秒
 	{
 		name: 'build',
 		command: 'bun run build',
-		dependsOn: ['lint', 'format'],
+		dependsOn: ['lint', 'format', 'typecheck'],
 		timeout: 30000, // 30秒
+	},
+	{
+		name: 'test:e2e',
+		command: 'bun run test:e2e',
+		dependsOn: ['build'],
+		timeout: 60000, // 60秒
 	},
 ];
 
@@ -93,8 +100,8 @@ Options:
 
 Examples:
   bun run ci                       # Run all tasks
-  bun run ci --only lint,test      # Run only lint and test
-  bun run ci --skip test           # Run all tasks except test
+  bun run ci --only lint,test:unit # Run only lint and unit tests
+  bun run ci --skip test:e2e       # Run all tasks except E2E tests
   bun run ci --verbose             # Show detailed output
 `);
 	process.exit(0);

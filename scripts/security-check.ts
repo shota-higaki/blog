@@ -21,6 +21,7 @@ const EXCLUDED_DIRS = [
 	'.astro',
 	'test-results',
 	'playwright-report',
+	'tests', // テストディレクトリを除外
 ];
 
 const ALLOWED_FILES = [
@@ -63,6 +64,11 @@ async function checkFile(filePath: string): Promise<{ file: string; matches: str
 	);
 
 	if (isAllowed) {
+		return { file: relativePath, matches: [] };
+	}
+
+	// Skip test files
+	if (relativePath.includes('test') || relativePath.includes('spec')) {
 		return { file: relativePath, matches: [] };
 	}
 
