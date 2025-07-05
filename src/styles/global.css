@@ -14,6 +14,26 @@
 	--accent-light: 138, 123, 244;
 	--accent-dark: 74, 63, 190;
 	--accent-gradient: linear-gradient(45deg, #4a3fbe, #6e5ec2, #8a7bf4);
+	
+	/* Light mode colors (default) */
+	--color-bg: 255, 255, 255;
+	--color-text: var(--gray-dark);
+	--color-text-secondary: var(--gray);
+	--color-border: var(--gray-light);
+	--color-code-bg: 243, 244, 246;
+	--color-code-text: var(--gray-dark);
+}
+
+/* Dark mode colors */
+html.dark {
+	--color-bg: 24, 24, 27;
+	--color-text: 228, 228, 231;
+	--color-text-secondary: 161, 161, 170;
+	--color-border: 63, 63, 70;
+	--color-code-bg: 39, 39, 42;
+	--color-code-text: 228, 228, 231;
+	--gray-light: 63, 63, 70;
+	--gray-dark: 228, 228, 231;
 }
 
 html {
@@ -30,6 +50,10 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-rendering: optimizeLegibility;
+	/* Apply color scheme */
+	background-color: rgb(var(--color-bg));
+	color: rgb(var(--color-text));
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 main {
@@ -60,7 +84,8 @@ img {
 code {
 	padding: 0.125rem 0.25rem;
 	border-radius: 0.25rem;
-	background-color: #f3f4f6;
+	background-color: rgb(var(--color-code-bg));
+	color: rgb(var(--color-code-text));
 }
 
 pre code {

@@ -14,8 +14,9 @@ import { SITE_TITLE } from '../consts';
 		z-index: 50;
 		margin: 0;
 		padding: 0 1em;
-		background: white;
+		background: rgb(var(--color-bg));
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		border-bottom: 1px solid rgb(var(--color-border));
 	}
 	h2 {
 		margin: 0;
@@ -26,12 +27,12 @@ import { SITE_TITLE } from '../consts';
 	h2 a,
 	h2 a.active {
 		text-decoration: none;
-		color: var(--black);
+		color: rgb(var(--color-text));
 		transition: color 0.2s ease;
 	}
 	
 	h2 a:hover {
-		color: var(--accent);
+		color: rgb(var(--accent));
 	}
 	
 	nav {
@@ -44,18 +45,18 @@ import { SITE_TITLE } from '../consts';
 	nav a {
 		display: inline-block;
 		padding: 1rem 0.75rem;
-		color: var(--black);
+		color: rgb(var(--color-text));
 		text-decoration: none;
 		border-radius: 0.375rem;
 		transition: background-color 0.2s ease;
 	}
 	
 	nav a:hover {
-		background-color: rgba(var(--gray-light), 0.3);
+		background-color: rgba(var(--color-border), 0.3);
 	}
 	
 	nav a:active {
-		background-color: rgba(var(--gray-light), 0.5);
+		background-color: rgba(var(--color-border), 0.5);
 	}
 	
 	/* モバイル最適化 */
