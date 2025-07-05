@@ -2,7 +2,6 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import { SITE_TITLE } from '../consts';
-import StructuredData from './StructuredData.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -83,5 +82,3 @@ main {
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={ogImage} />
 
-<!-- Structured Data -->
-<StructuredData type="website" />
