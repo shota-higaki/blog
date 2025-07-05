@@ -1,0 +1,30 @@
+# robots.txt for https://shota-higaki.github.io/blog/
+# Allow all crawlers
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://shota-higaki.github.io/blog/sitemap-index.xml
+
+# Crawl-delay for responsible crawling (optional)
+# Crawl-delay: 1
+
+# Disallow crawling of duplicate content
+Disallow: /blog/page/
+Disallow: /blog/tag/*/page/
+
+# Allow search engines to crawl CSS and JS files
+Allow: /blog/_astro/
+Allow: /blog/*.css
+Allow: /blog/*.js
+
+# Block bad bots (optional)
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /

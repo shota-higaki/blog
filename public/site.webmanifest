@@ -1,0 +1,16 @@
+{
+	"name": "Code & Living",
+	"short_name": "C&L Blog",
+	"description": "技術と日常を繋ぐ個人ブログ",
+	"start_url": "/blog/",
+	"display": "minimal-ui",
+	"theme_color": "#7C3AED",
+	"background_color": "#ffffff",
+	"icons": [
+		{
+			"src": "/blog/favicon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml"
+		}
+	]
+}
