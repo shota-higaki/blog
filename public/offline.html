@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オフライン - Code Rain Catcher</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #1a1a1a;
+            color: #4ade80;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        .offline-message {
+            position: absolute;
+            top: 20px;
+            text-align: center;
+            z-index: 10;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #4ade80;
+            opacity: 0.9;
+        }
+
+        .offline-message h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #86efac;
+        }
+
+        .offline-message p {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            color: #bbf7d0;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            background-color: #262626;
+            border: 2px solid #22c55e;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+        }
+
+        .game-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.2rem;
+            text-shadow: none;
+        }
+
+        .score {
+            color: #86efac;
+        }
+
+        .lives {
+            color: #fbbf24;
+            margin-top: 5px;
+        }
+
+        .game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #4ade80;
+        }
+
+        .game-over h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #86efac;
+        }
+
+        .game-over p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            background-color: #22c55e;
+            color: #000;
+            border: none;
+            padding: 10px 30px;
+            font-size: 1rem;
+            font-family: inherit;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .retry-btn:hover {
+            background-color: #4ade80;
+            transform: scale(1.05);
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #86efac;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                height: 500px;
+            }
+            
+            .offline-message h1 {
+                font-size: 1.2rem;
+            }
+            
+            .instructions {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-message">
+        <h1>オフラインモード</h1>
+        <p>インターネット接続がありません</p>
+        <p>ゲームをプレイしながらお待ちください！</p>
+    </div>
+
+    <div class="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div class="game-info">
+            <div class="score">スコア: <span id="score">0</span></div>
+            <div class="lives">ライフ: <span id="lives">3</span></div>
+        </div>
+        <div class="game-over" id="gameOver">
+            <h2>ゲームオーバー</h2>
+            <p>最終スコア: <span id="finalScore">0</span></p>
+            <button class="retry-btn" onclick="resetGame()">もう一度プレイ</button>
+        </div>
+    </div>
+
+    <div class="instructions">
+        ← → キーで移動 | 緑のコードをキャッチ、赤いバグを避けろ！
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Canvas size
+        canvas.width = 800;
+        canvas.height = 600;
+
+        // Game variables
+        let score = 0;
+        let lives = 3;
+        let gameRunning = true;
+        let rainDrops = [];
+        let gameStartTime = Date.now();
+        let speedMultiplier = 1.0;
+        let player = {
+            x: canvas.width / 2 - 20,
+            y: canvas.height - 60,
+            width: 40,
+            height: 30,
+            speed: 8
+        };
+
+        // Code patterns (good and bad)
+        const goodPatterns = [
+            'const', 'let', 'function', 'return', 'async', 'await',
+            'class', 'import', 'export', '() =>', 'if', 'for'
+        ];
+        
+        const badPatterns = [
+            'error', 'bug', 'null', 'undefined', 'NaN', 'throw',
+            'crash', 'fail', '404', '500', 'panic', 'fatal'
+        ];
+        
+        const bonusPatterns = ['// TODO', '/* fix */', 'console.log'];
+
+        // Rain drop class
+        class RainDrop {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = -20;
+                this.baseSpeed = Math.random() * 1.5 + 1;
+                this.speed = this.baseSpeed * speedMultiplier;
+                this.opacity = Math.random() * 0.3 + 0.7;
+                
+                const rand = Math.random();
+                if (rand < 0.6) {
+                    this.text = goodPatterns[Math.floor(Math.random() * goodPatterns.length)];
+                    this.type = 'good';
+                    this.color = '#4ade80';
+                    this.fontSize = 16;
+                } else if (rand < 0.9) {
+                    this.text = badPatterns[Math.floor(Math.random() * badPatterns.length)];
+                    this.type = 'bad';
+                    this.color = '#ef4444';
+                    this.fontSize = 16;
+                } else {
+                    this.text = bonusPatterns[Math.floor(Math.random() * bonusPatterns.length)];
+                    this.type = 'bonus';
+                    this.color = '#fbbf24';
+                    this.fontSize = 18;
+                }
+            }
+
+            update() {
+                this.y += this.speed;
+                
+                // Add slight horizontal drift
+                this.x += Math.sin(this.y * 0.01) * 0.5;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.font = `bold ${this.fontSize || 16}px Courier New`;
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 10;
+                ctx.fillText(this.text, this.x, this.y);
+                ctx.restore();
+            }
+
+            isOffScreen() {
+                return this.y > canvas.height;
+            }
+
+            checkCollision() {
+                const textWidth = ctx.measureText(this.text).width;
+                if (this.x < player.x + player.width &&
+                    this.x + textWidth > player.x &&
+                    this.y > player.y &&
+                    this.y < player.y + player.height) {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        // Input handling
+        const keys = {};
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        // Update player position
+        function updatePlayer() {
+            if (keys['ArrowLeft'] && player.x > 0) {
+                player.x -= player.speed;
+            }
+            if (keys['ArrowRight'] && player.x < canvas.width - player.width) {
+                player.x += player.speed;
+            }
+        }
+
+        // Draw player
+        function drawPlayer() {
+            ctx.save();
+            ctx.fillStyle = '#4ade80';
+            ctx.font = 'bold 30px Courier New';
+            ctx.shadowColor = '#4ade80';
+            ctx.shadowBlur = 15;
+            ctx.fillText('▂█▂', player.x, player.y + 20);
+            ctx.restore();
+        }
+
+        // Draw speed indicator
+        function drawSpeedIndicator() {
+            if (speedMultiplier > 1.0) {
+                ctx.save();
+                ctx.fillStyle = '#fbbf24';
+                ctx.font = 'bold 14px Courier New';
+                ctx.fillText(`速度 x${speedMultiplier.toFixed(1)}`, 10, canvas.height - 20);
+                ctx.restore();
+            }
+        }
+
+        // Create background matrix effect
+        function drawBackground() {
+            ctx.fillStyle = 'rgba(38, 38, 38, 0.5)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Update game
+        function update() {
+            if (!gameRunning) return;
+
+            // Update speed multiplier every 30 seconds
+            const elapsedSeconds = (Date.now() - gameStartTime) / 1000;
+            speedMultiplier = 1.0 + Math.floor(elapsedSeconds / 30) * 0.1;
+
+            updatePlayer();
+
+            // Create new rain drops
+            if (Math.random() < 0.05) {
+                rainDrops.push(new RainDrop());
+            }
+
+            // Update and check rain drops
+            for (let i = rainDrops.length - 1; i >= 0; i--) {
+                const drop = rainDrops[i];
+                drop.update();
+
+                if (drop.checkCollision()) {
+                    if (drop.type === 'good') {
+                        score += 10;
+                    } else if (drop.type === 'bad') {
+                        score -= 20;
+                        lives--;
+                    } else if (drop.type === 'bonus') {
+                        score += 50;
+                    }
+                    
+                    rainDrops.splice(i, 1);
+                    updateUI();
+                    
+                    if (lives <= 0) {
+                        gameOver();
+                    }
+                } else if (drop.isOffScreen()) {
+                    rainDrops.splice(i, 1);
+                }
+            }
+        }
+
+        // Draw game
+        function draw() {
+            drawBackground();
+            
+            // Draw rain drops
+            rainDrops.forEach(drop => drop.draw());
+            
+            drawPlayer();
+            drawSpeedIndicator();
+        }
+
+        // Update UI
+        function updateUI() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('lives').textContent = lives;
+        }
+
+        // Game over
+        function gameOver() {
+            gameRunning = false;
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('gameOver').style.display = 'block';
+        }
+
+        // Reset game
+        function resetGame() {
+            score = 0;
+            lives = 3;
+            gameRunning = true;
+            rainDrops = [];
+            player.x = canvas.width / 2 - 20;
+            gameStartTime = Date.now();
+            speedMultiplier = 1.0;
+            document.getElementById('gameOver').style.display = 'none';
+            updateUI();
+        }
+
+        // Game loop
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start game
+        gameLoop();
+
+        // Check online status
+        window.addEventListener('online', () => {
+            location.reload();
+        });
+    </script>
+</body>
+</html>

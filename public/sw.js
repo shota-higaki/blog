@@ -1,6 +1,12 @@
 // Service Worker for caching and performance optimization
 const CACHE_NAME = 'blog-cache-v1';
-const urlsToCache = ['/blog/', '/blog/favicon.svg', '/blog/og-image.svg', '/blog/site.webmanifest'];
+const urlsToCache = [
+	'/blog/',
+	'/blog/favicon.svg',
+	'/blog/og-image.svg',
+	'/blog/site.webmanifest',
+	'/blog/offline.html',
+];
 
 // Install event - cache resources
 self.addEventListener('install', (event) => {
@@ -69,8 +75,9 @@ self.addEventListener('fetch', (event) => {
 			})
 			.catch(() => {
 				// Offline fallback for HTML pages
-				if (event.request.headers.get('accept').includes('text/html')) {
-					return caches.match('/blog/');
+				const acceptHeader = event.request.headers.get('accept');
+				if (acceptHeader?.includes('text/html')) {
+					return caches.match('/blog/offline.html');
 				}
 			}),
 	);

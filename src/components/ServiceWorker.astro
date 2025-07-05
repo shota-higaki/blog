@@ -19,3 +19,11 @@ const _isProduction = import.meta.env.PROD;
 		}
 	</script>
 )}
+
+<!-- 開発環境用のオフラインページテストリンク -->
+{!_isProduction && (
+	<script is:inline>
+		// 開発環境でのオフラインページ確認用
+		console.log('開発環境：オフラインページは /blog/offline.html で確認できます');
+	</script>
+)}
