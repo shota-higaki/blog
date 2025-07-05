@@ -129,6 +129,29 @@ bun run security:check
 bun run security:check --staged
 ```
 
+## SEO最適化
+
+### 実装済みの機能
+- **robots.txt**: 適切なクローラー設定とsitemap参照
+- **カスタムfavicon**: < & > デザインで「Code & Living」のコンセプトを表現
+- **Web App Manifest**: PWA対応の基礎実装
+- **Open Graph画像**: 
+  - サイト全体用の静的OG画像
+  - 記事ごとの動的OG画像生成（`/og/[slug].svg`）
+- **JSON-LD構造化データ**: 
+  - WebSite, BlogPosting, BreadcrumbList
+  - Person, Organizationスキーマ
+- **パフォーマンス最適化**:
+  - Service Workerによるキャッシング
+  - リソースヒント（dns-prefetch, preconnect）
+  - 画像の遅延読み込み
+  - Critical CSSのインライン化
+
+### Service Worker
+- 本番環境でのみ有効
+- CSS、JS、画像ファイルを自動的にキャッシュ
+- オフライン時のフォールバック対応
+
 ## 注意事項
 
 - 記事執筆のガイドラインは[writing-guidelines.md](./docs/writing-guidelines.md)を参照してください

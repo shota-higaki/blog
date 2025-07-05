@@ -6,6 +6,7 @@ import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import GoogleAnalytics from '../../components/GoogleAnalytics.astro';
 import Header from '../../components/Header.astro';
+import ServiceWorker from '../../components/ServiceWorker.astro';
 import StructuredData from '../../components/StructuredData.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import '../../styles/global.css';
@@ -23,6 +24,7 @@ const posts = (await getCollection('blog'))
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<GoogleAnalytics />
+		<ServiceWorker />
 		<StructuredData 
 			type="breadcrumb" 
 			breadcrumbItems={[

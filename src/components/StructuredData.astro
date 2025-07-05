@@ -2,13 +2,16 @@
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 interface Props {
-	type: 'website' | 'article' | 'breadcrumb';
+	type: 'website' | 'article' | 'breadcrumb' | 'person' | 'organization';
 	title?: string;
 	description?: string;
 	publishDate?: Date;
 	updatedDate?: Date;
 	author?: string;
 	breadcrumbItems?: Array<{ name: string; url: string }>;
+	imageUrl?: string;
+	keywords?: string[];
+	articleSection?: string;
 }
 
 const {
@@ -19,6 +22,9 @@ const {
 	updatedDate,
 	author = '樋垣 将太',
 	breadcrumbItems,
+	imageUrl,
+	keywords = [],
+	articleSection = 'Technology',
 } = Astro.props;
 
 let structuredData: any = {};
@@ -31,6 +37,7 @@ if (type === 'website') {
 		name: SITE_TITLE,
 		description: SITE_DESCRIPTION,
 		url: Astro.site?.toString(),
+		inLanguage: 'ja-JP',
 		potentialAction: {
 			'@type': 'SearchAction',
 			target: {
@@ -38,6 +45,16 @@ if (type === 'website') {
 				urlTemplate: `${Astro.site}search?q={search_term_string}`,
 			},
 			'query-input': 'required name=search_term_string',
+		},
+		publisher: {
+			'@type': 'Organization',
+			name: SITE_TITLE,
+			logo: {
+				'@type': 'ImageObject',
+				url: `${Astro.site}favicon.svg`,
+				width: 32,
+				height: 32,
+			},
 		},
 	};
 }
@@ -49,9 +66,11 @@ if (type === 'article' && title && publishDate) {
 		'@type': 'BlogPosting',
 		headline: title,
 		description: description,
+		image: imageUrl || `${Astro.site}og-image.svg`,
 		author: {
 			'@type': 'Person',
 			name: author,
+			url: `${Astro.site}about/`,
 		},
 		datePublished: publishDate.toISOString(),
 		dateModified: (updatedDate || publishDate).toISOString(),
@@ -61,12 +80,18 @@ if (type === 'article' && title && publishDate) {
 			logo: {
 				'@type': 'ImageObject',
 				url: `${Astro.site}favicon.svg`,
+				width: 32,
+				height: 32,
 			},
 		},
 		mainEntityOfPage: {
 			'@type': 'WebPage',
 			'@id': Astro.url.toString(),
 		},
+		articleSection: articleSection,
+		keywords: keywords.length > 0 ? keywords.join(', ') : undefined,
+		inLanguage: 'ja-JP',
+		url: Astro.url.toString(),
 	};
 }
 
@@ -81,6 +106,43 @@ if (type === 'breadcrumb' && breadcrumbItems) {
 			name: item.name,
 			item: item.url,
 		})),
+	};
+}
+
+// Person構造化データ
+if (type === 'person') {
+	structuredData = {
+		'@context': 'https://schema.org',
+		'@type': 'Person',
+		name: author,
+		url: `${Astro.site}about/`,
+		sameAs: [
+			'https://github.com/shota-higaki',
+		],
+		jobTitle: 'Software Engineer',
+		worksFor: {
+			'@type': 'Organization',
+			name: SITE_TITLE,
+		},
+	};
+}
+
+// Organization構造化データ
+if (type === 'organization') {
+	structuredData = {
+		'@context': 'https://schema.org',
+		'@type': 'Organization',
+		name: SITE_TITLE,
+		url: Astro.site?.toString(),
+		logo: {
+			'@type': 'ImageObject',
+			url: `${Astro.site}favicon.svg`,
+			width: 32,
+			height: 32,
+		},
+		sameAs: [
+			'https://github.com/shota-higaki',
+		],
 	};
 }
 ---

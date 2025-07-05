@@ -7,10 +7,11 @@ import '../styles/global.css';
 interface Props {
 	title: string;
 	description: string;
+	ogImage?: string;
 }
 
-const { title, description } = Astro.props;
-const ogImage = 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
+const { title, description, ogImage: customOgImage } = Astro.props;
+const ogImage = customOgImage || new URL('/blog/og-image.svg', Astro.site).href;
 
 // Critical CSS for above-the-fold content
 const criticalCSS = `
@@ -55,6 +56,13 @@ main {
 	href={new URL('rss.xml', Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
+
+<!-- Resource Hints -->
+<link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+<link rel="preconnect" href="https://www.google-analytics.com" />
+
+<!-- Performance optimizations -->
+<meta http-equiv="x-dns-prefetch-control" content="on" />
 
 <!-- Critical CSS inline -->
 <style set:html={criticalCSS}></style>

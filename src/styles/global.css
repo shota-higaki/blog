@@ -18,16 +18,43 @@
 
 html {
 	scroll-behavior: smooth;
+	/* Better scrolling performance */
+	-webkit-overflow-scrolling: touch;
 }
 
 body {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
+	/* Optimize font rendering */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
 }
 
 main {
 	flex: 1;
+}
+
+/* Performance optimizations */
+img {
+	/* Prevent layout shift */
+	height: auto;
+	max-width: 100%;
+	/* Better image rendering */
+	image-rendering: -webkit-optimize-contrast;
+}
+
+/* Reduce animation on low-power devices */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
 }
 
 code {

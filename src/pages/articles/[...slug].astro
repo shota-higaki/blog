@@ -12,8 +12,11 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
+
+// 記事専用のOG画像URL
+const ogImageUrl = new URL(`/blog/og/${entry.id}.svg`, Astro.site).href;
 ---
 
-<BlogPost {...entry.data}>
+<BlogPost {...entry.data} ogImage={ogImageUrl}>
 	<Content />
 </BlogPost>
