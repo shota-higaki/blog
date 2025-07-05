@@ -5,7 +5,7 @@ const today = new Date();
 <footer>
 	&copy; {today.getFullYear()} Shota Higaki. All rights reserved.
 	<div class="social-links">
-		<a href="https://github.com/shota-higaki" target="_blank" rel="noopener noreferrer" title="GitHubプロフィールを見る" aria-label="Shota HigakiのGitHubプロフィール">
+		<a href="https://github.com/shota-higaki" target="_blank" rel="noopener noreferrer" title="GitHubプロフィールを見る" aria-label="Shota HigakiのGitHubプロフィール" class="github-link">
 			<span class="sr-only">GitHub</span>
 			<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github"
 				><path
@@ -13,6 +13,25 @@ const today = new Date();
 					d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
 				></path></svg
 			>
+		</a>
+		<a href={`${import.meta.env.BASE_URL}/rss.xml`} target="_blank" rel="noopener noreferrer" title="RSSフィードを購読" aria-label="ブログのRSSフィード" class="rss-link">
+			<span class="sr-only">RSS</span>
+			<svg viewBox="0 0 256 256" aria-hidden="true" width="32" height="32" astro-icon="rss">
+				<defs>
+					<linearGradient x1="0.085" y1="0.085" x2="0.915" y2="0.915" id="RSSg">
+						<stop offset="0.0" stop-color="#E3702D"/><stop offset="0.1071" stop-color="#EA7D31"/>
+						<stop offset="0.3503" stop-color="#F69537"/><stop offset="0.5" stop-color="#FB9E3A"/>
+						<stop offset="0.7016" stop-color="#EA7C31"/><stop offset="0.8866" stop-color="#DE642B"/>
+						<stop offset="1.0" stop-color="#D95B29"/>
+					</linearGradient>
+				</defs>
+				<rect width="256" height="256" rx="55" ry="55" x="0" y="0" fill="#CC5D15"/>
+				<rect width="246" height="246" rx="50" ry="50" x="5" y="5" fill="#F49C52"/>
+				<rect width="236" height="236" rx="47" ry="47" x="10" y="10" fill="url(#RSSg)"/>
+				<circle cx="68" cy="189" r="24" fill="#FFF"/>
+				<path d="M160 213h-34a82 82 0 0 0 -82 -82v-34a116 116 0 0 1 116 116z" fill="#FFF"/>
+				<path d="M184 213A140 140 0 0 0 44 73 V 38a175 175 0 0 1 175 175z" fill="#FFF"/>
+			</svg>
 		</a>
 	</div>
 </footer>
@@ -37,5 +56,59 @@ const today = new Date();
 	}
 	.social-links a:hover {
 		color: rgb(var(--color-text));
+	}
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border-width: 0;
+	}
+	
+	/* GitHub icon specific styles */
+	.github-link {
+		color: #1a202c; /* Near black for light mode */
+	}
+	
+	.github-link:hover {
+		color: #000000; /* Pure black on hover */
+		transform: translateY(-2px);
+		transition: all 0.2s ease;
+	}
+	
+	html.dark .github-link {
+		color: #e5e7eb; /* Near white for dark mode */
+	}
+	
+	html.dark .github-link:hover {
+		color: #ffffff; /* Pure white on hover */
+	}
+	
+	/* RSS icon specific styles */
+	.rss-link:hover {
+		transform: translateY(-2px);
+		transition: transform 0.2s ease;
+	}
+	
+	/* Hide gradient in dark mode */
+	html.dark .rss-link svg defs {
+		display: none;
+	}
+	
+	/* Dark mode RSS icon colors */
+	html.dark .rss-link svg rect:nth-child(2) {
+		fill: #4A5568; /* --gray dark mode */
+	}
+	
+	html.dark .rss-link svg rect:nth-child(3) {
+		fill: #6B7280;
+	}
+	
+	html.dark .rss-link svg rect:nth-child(4) {
+		fill: #9CA3AF;
 	}
 </style>
