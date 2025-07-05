@@ -33,8 +33,10 @@ export default defineConfig({
 
 	// 画像最適化設定
 	image: {
-		// 画像品質を調整（80%で良好な品質を維持）
-		quality: 80,
+		// デフォルトの画像サービスを使用
+		service: {
+			entrypoint: 'astro/assets/services/sharp',
+		},
 	},
 
 	// ビルド最適化

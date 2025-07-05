@@ -17,17 +17,9 @@ import '../styles/global.css';
 		<ServiceWorker />
 		<StructuredData type="website" />
 		<style>
-			/* Reset and prevent scrollbars */
-			* {
+			/* 404ページ専用のスタイル - スコープを限定 */
+			.error-page {
 				box-sizing: border-box;
-			}
-
-			html {
-				overflow: hidden;
-				height: 100%;
-			}
-
-			body {
 				margin: 0;
 				padding: 0;
 				overflow: hidden;
@@ -251,10 +243,10 @@ import '../styles/global.css';
 			}
 		</style>
 	</head>
-	<body class="bg-white dark:bg-zinc-900" style="margin: 0; padding: 0;">
+	<body class="error-page bg-white dark:bg-zinc-900">
 		<a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
 		<Header />
-		<main id="main-content" class="error-container" style="margin: 0;">
+		<main id="main-content" class="error-container">
 			<div class="error-content">
 				<!-- SVGアニメーション -->
 				<div class="svg-container">

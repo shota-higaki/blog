@@ -5,6 +5,7 @@
  */
 
 import { cpus } from 'node:os';
+// @ts-ignore - parseArgs is available in Node.js 18.11.0+
 import { parseArgs } from 'node:util';
 import { $ } from 'bun';
 

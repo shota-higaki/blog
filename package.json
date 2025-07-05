@@ -31,13 +31,13 @@
 		"@astrojs/sitemap": "^3.4.1",
 		"@tailwindcss/typography": "^0.5.16",
 		"@tailwindcss/vite": "^4.1.11",
-		"astro": "^5.10.1",
+		"astro": "^5.11.0",
 		"tailwindcss": "^4.1.11",
 		"typescript": "^5.8.3"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.0.6",
-		"@playwright/test": "^1.53.1",
+		"@playwright/test": "^1.53.2",
 		"@types/bun": "^1.2.18",
 		"axe-playwright": "^2.1.0"
 	}

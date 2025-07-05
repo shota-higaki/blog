@@ -5,9 +5,12 @@ type Props = HTMLAttributes<'a'>;
 
 const { href, class: className, ...props } = Astro.props;
 const pathname = Astro.url.pathname;
-const _hrefWithoutBase = href.replace(import.meta.env.BASE_URL, '/');
+const _hrefWithoutBase =
+	typeof href === 'string' ? href.replace(import.meta.env.BASE_URL, '/') : '';
 const _isActive =
-	pathname === href || (pathname.startsWith(href) && href !== import.meta.env.BASE_URL);
+	href &&
+	typeof href === 'string' &&
+	(pathname === href || (pathname.startsWith(href) && href !== import.meta.env.BASE_URL));
 ---
 
 <a href={href} class:list={[className, { active: _isActive }]} {...props}>
