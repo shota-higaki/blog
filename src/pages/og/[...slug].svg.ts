@@ -1,5 +1,5 @@
-import type { APIRoute } from 'astro';
 import { getCollection, getEntry } from 'astro:content';
+import type { APIRoute } from 'astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -89,10 +89,9 @@ function renderTitle(title: string): string {
 function renderDescription(description: string): string {
 	// 説明文も長い場合は省略
 	const maxLength = 80;
-	const truncated = description.length > maxLength 
-		? description.substring(0, maxLength - 3) + '...' 
-		: description;
-	
+	const truncated =
+		description.length > maxLength ? description.substring(0, maxLength - 3) + '...' : description;
+
 	return `<text x="600" y="450" font-family="Arial, sans-serif" font-size="24" fill="#FFFFFF" text-anchor="middle" opacity="0.8">${escapeXml(truncated)}</text>`;
 }
 

@@ -10,14 +10,7 @@ interface Props {
 	class?: string;
 }
 
-const { 
-	src, 
-	alt, 
-	width, 
-	height, 
-	loading = 'lazy',
-	class: className 
-} = Astro.props;
+const { src, alt, width, height, loading = 'lazy', class: className } = Astro.props;
 ---
 
 <Image

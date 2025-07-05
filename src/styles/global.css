@@ -14,7 +14,7 @@
 	--accent-light: 138, 123, 244;
 	--accent-dark: 74, 63, 190;
 	--accent-gradient: linear-gradient(45deg, #4a3fbe, #6e5ec2, #8a7bf4);
-	
+
 	/* Light mode colors (default) */
 	--color-bg: 255, 255, 255;
 	--color-text: var(--gray-dark);
@@ -26,14 +26,14 @@
 
 /* Dark mode colors */
 html.dark {
-	--color-bg: 24, 24, 27;
-	--color-text: 228, 228, 231;
-	--color-text-secondary: 161, 161, 170;
-	--color-border: 63, 63, 70;
-	--color-code-bg: 39, 39, 42;
-	--color-code-text: 228, 228, 231;
-	--gray-light: 63, 63, 70;
-	--gray-dark: 228, 228, 231;
+	--color-bg: 17, 17, 17;
+	--color-text: 245, 245, 245;
+	--color-text-secondary: 180, 180, 180;
+	--color-border: 51, 51, 51;
+	--color-code-bg: 30, 30, 30;
+	--color-code-text: 245, 245, 245;
+	--gray-light: 71, 71, 71;
+	--gray-dark: 245, 245, 245;
 }
 
 html {
@@ -53,7 +53,9 @@ body {
 	/* Apply color scheme */
 	background-color: rgb(var(--color-bg));
 	color: rgb(var(--color-text));
-	transition: background-color 0.3s ease, color 0.3s ease;
+	transition:
+		background-color 0.3s ease,
+		color 0.3s ease;
 }
 
 main {

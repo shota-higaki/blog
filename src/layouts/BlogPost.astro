@@ -11,7 +11,8 @@ import ThemeToggle from '../components/ThemeToggle.astro';
 import '../styles/global.css';
 import '../styles/markdown.css';
 
-const { title, description, publishDate, updatedDate, heroImage, heroImageAlt, ogImage } = Astro.props;
+const { title, description, publishDate, updatedDate, heroImage, heroImageAlt, ogImage } =
+	Astro.props;
 ---
 
 <html lang="ja">
@@ -35,9 +36,14 @@ const { title, description, publishDate, updatedDate, heroImage, heroImageAlt, o
 				{ name: title, url: Astro.url.toString() }
 			]} 
 		/>
+		<style>
+			html.dark .article-title {
+				color: white;
+			}
+		</style>
 	</head>
 
-	<body class="bg-white">
+	<body class="bg-white dark:bg-zinc-900">
 		<Header />
 		<main>
 			<article class="max-w-4xl mx-auto px-4 py-8">
@@ -66,7 +72,7 @@ const { title, description, publishDate, updatedDate, heroImage, heroImageAlt, o
 								最終更新: <FormattedDate date={updatedDate} />
 							</div>
 						)}
-						<h1 class="text-4xl font-bold mt-2 mb-4 text-gray-900 dark:text-gray-100">{title}</h1>
+						<h1 class="article-title text-4xl font-bold mt-2 mb-4 text-gray-900">{title}</h1>
 						<hr class="my-4 border-gray-300 dark:border-gray-700" />
 					</header>
 					<div class="mt-8 markdown-content">

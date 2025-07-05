@@ -33,16 +33,21 @@ const posts = (await getCollection('blog'))
 				{ name: '記事一覧', url: Astro.url.toString() }
 			]} 
 		/>
+		<style>
+			html.dark .articles-title {
+				color: white;
+			}
+		</style>
 	</head>
-	<body class="bg-white dark:bg-gray-900">
+	<body class="bg-white dark:bg-zinc-900">
 		<Header />
 		<main class="max-w-6xl mx-auto px-4 py-8">
 			<section>
-				<h1 class="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100">Articles</h1>
+				<h1 class="articles-title text-3xl font-bold mb-8 text-gray-900">Articles</h1>
 				<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 					{
 						posts.map((post, index) => (
-							<article class={`${index === 0 ? 'md:col-span-2 lg:col-span-3' : ''}`}>
+							<article class={`${index === 0 ? 'md:col-span-2 lg:col-span-3' : ''} bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300`}>
 								<a href={`${import.meta.env.BASE_URL}/articles/${post.id}/`} class="group block">
 									{post.data.heroImage && (
 										<Image 
@@ -50,10 +55,10 @@ const posts = (await getCollection('blog'))
 											height={360} 
 											src={post.data.heroImage} 
 											alt={post.data.heroImageAlt || post.data.title} 
-											class="w-full rounded-lg shadow-md group-hover:shadow-xl transition-shadow duration-300 mb-4"
+											class="w-full rounded-lg shadow-md group-hover:shadow-xl transition-shadow duration-300 mb-4 -mt-6 -mx-6"
 										/>
 									)}
-									<h2 class={`${index === 0 ? 'text-3xl' : 'text-xl'} font-bold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors`}>
+									<h2 class={`${index === 0 ? 'text-3xl' : 'text-xl'} font-bold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors ${post.data.heroImage ? 'mt-4' : ''}`}>
 										{post.data.title}
 									</h2>
 									<p class="text-gray-700 dark:text-gray-300 mb-2">{post.data.description}</p>
