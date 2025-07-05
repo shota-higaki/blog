@@ -152,8 +152,26 @@ bun run security:check --staged
 - CSS、JS、画像ファイルを自動的にキャッシュ
 - オフライン時のフォールバック対応
 
+## デザインシステム
+
+### カラーシステム
+- WCAGアクセシビリティ基準（AA）に準拠
+- ライトモード用とダークモード用で異なるアクセント色を使用
+- 詳細は[design-system.md](./docs/design-system.md)を参照
+
+### CSS変数
+- `--accent-light-mode`: ライトモード用アクセント色（107, 93, 211）
+- `--accent`: ダークモード用アクセント色（133, 116, 242）
+- すべての色指定にはCSS変数を使用すること
+
+### アクセシビリティ
+- すべてのテキストは背景とのコントラスト比4.5:1以上を確保
+- フォーカス状態は明確に表示（2px solid outline）
+- 色のみに依存しない情報伝達
+
 ## 注意事項
 
 - 記事執筆のガイドラインは[writing-guidelines.md](./docs/writing-guidelines.md)を参照してください
+- デザインシステムとアクセシビリティは[design-system.md](./docs/design-system.md)を参照してください
 - パフォーマンス最適化については常に考慮し、Lighthouseスコアを維持してください
 - 開発環境構築の詳細は[development-setup.md](./docs/development-setup.md)を参照してください
