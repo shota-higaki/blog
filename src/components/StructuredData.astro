@@ -27,11 +27,11 @@ const {
 	articleSection = 'Technology',
 } = Astro.props;
 
-let structuredData: any = {};
+let _structuredData: any = {};
 
 // WebSite構造化データ
 if (type === 'website') {
-	structuredData = {
+	_structuredData = {
 		'@context': 'https://schema.org',
 		'@type': 'WebSite',
 		name: SITE_TITLE,
@@ -61,7 +61,7 @@ if (type === 'website') {
 
 // Article構造化データ
 if (type === 'article' && title && publishDate) {
-	structuredData = {
+	_structuredData = {
 		'@context': 'https://schema.org',
 		'@type': 'BlogPosting',
 		headline: title,
@@ -97,7 +97,7 @@ if (type === 'article' && title && publishDate) {
 
 // BreadcrumbList構造化データ
 if (type === 'breadcrumb' && breadcrumbItems) {
-	structuredData = {
+	_structuredData = {
 		'@context': 'https://schema.org',
 		'@type': 'BreadcrumbList',
 		itemListElement: breadcrumbItems.map((item, index) => ({
@@ -111,7 +111,7 @@ if (type === 'breadcrumb' && breadcrumbItems) {
 
 // Person構造化データ
 if (type === 'person') {
-	structuredData = {
+	_structuredData = {
 		'@context': 'https://schema.org',
 		'@type': 'Person',
 		name: author,
@@ -127,7 +127,7 @@ if (type === 'person') {
 
 // Organization構造化データ
 if (type === 'organization') {
-	structuredData = {
+	_structuredData = {
 		'@context': 'https://schema.org',
 		'@type': 'Organization',
 		name: SITE_TITLE,
@@ -143,6 +143,6 @@ if (type === 'organization') {
 }
 ---
 
-{Object.keys(structuredData).length > 0 && (
-	<script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData)} />
+{Object.keys(_structuredData).length > 0 && (
+	<script type="application/ld+json" is:inline set:html={JSON.stringify(_structuredData)} />
 )}

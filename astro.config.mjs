@@ -33,8 +33,6 @@ export default defineConfig({
 
 	// 画像最適化設定
 	image: {
-		// WebP形式を優先（AVIF はサポートが限定的）
-		formats: ['webp'],
 		// 画像品質を調整（80%で良好な品質を維持）
 		quality: 80,
 	},
@@ -43,8 +41,6 @@ export default defineConfig({
 	build: {
 		// HTML圧縮を有効化
 		inlineStylesheets: 'auto',
-		// アセットのインライン化閾値を調整（2KB以下はインライン化）
-		assetsInlineLimit: 2048,
 	},
 
 	// 圧縮設定

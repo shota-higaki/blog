@@ -1,15 +1,15 @@
 ---
-const GA_MEASUREMENT_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const _GA_MEASUREMENT_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 
 // 本番環境でのみGAを有効化
-const isProduction = import.meta.env.PROD;
+const _isProduction = import.meta.env.PROD;
 ---
 
-{isProduction && GA_MEASUREMENT_ID && (
+{_isProduction && _GA_MEASUREMENT_ID && (
   <>
     <!-- Google Analytics -->
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
-    <script define:vars={{ GA_MEASUREMENT_ID }}>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${_GA_MEASUREMENT_ID}`}></script>
+    <script define:vars={{ GA_MEASUREMENT_ID: _GA_MEASUREMENT_ID }}>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());

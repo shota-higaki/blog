@@ -1,7 +1,4 @@
 ---
-// Import the global.css file here so that it is included on
-// all pages through the use of the <BaseHead /> component.
-import { SITE_TITLE } from '../consts';
 import '../styles/global.css';
 
 interface Props {
@@ -11,10 +8,10 @@ interface Props {
 }
 
 const { title, description, ogImage: customOgImage } = Astro.props;
-const ogImage = customOgImage || new URL('/blog/og-image.svg', Astro.site).href;
+const _ogImage = customOgImage || new URL('/blog/og-image.svg', Astro.site).href;
 
 // Critical CSS for above-the-fold content
-const criticalCSS = `
+const _criticalCSS = `
 :root {
 	--font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 	--font-mono: "Menlo", "Monaco", "Courier New", monospace;
@@ -52,7 +49,7 @@ main {
 <link
 	rel="alternate"
 	type="application/rss+xml"
-	title={SITE_TITLE}
+	title="Code & Living"
 	href={new URL('rss.xml', Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
@@ -66,7 +63,7 @@ main {
 <meta http-equiv="x-dns-prefetch-control" content="on" />
 
 <!-- Critical CSS inline -->
-<style set:html={criticalCSS}></style>
+<style set:html={_criticalCSS}></style>
 
 <!-- Theme initialization (prevent flash) -->
 <script is:inline>
@@ -102,13 +99,13 @@ main {
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={ogImage} />
-<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:image" content={_ogImage} />
+<meta property="og:site_name" content="Code & Living" />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={ogImage} />
+<meta property="twitter:image" content={_ogImage} />
 

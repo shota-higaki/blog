@@ -1,9 +1,9 @@
 ---
 // Service Worker は本番環境でのみ有効化
-const isProduction = import.meta.env.PROD;
+const _isProduction = import.meta.env.PROD;
 ---
 
-{isProduction && (
+{_isProduction && (
 	<script is:inline>
 		// Service Worker registration
 		if ('serviceWorker' in navigator) {

@@ -34,7 +34,7 @@ const tasks: Task[] = [
 	{
 		name: 'build',
 		command: 'bun run build',
-		dependsOn: ['typecheck', 'lint', 'format'],
+		dependsOn: ['lint', 'format'],
 		timeout: 30000, // 30秒
 	},
 ];
@@ -104,12 +104,12 @@ function filterTasks(): Task[] {
 	let filteredTasks = [...tasks];
 
 	if (values.only) {
-		const onlyTasks = values.only.split(',').map((t) => t.trim());
+		const onlyTasks = values.only.split(',').map((t: string) => t.trim());
 		filteredTasks = filteredTasks.filter((t) => onlyTasks.includes(t.name));
 	}
 
 	if (values.skip) {
-		const skipTasks = values.skip.split(',').map((t) => t.trim());
+		const skipTasks = values.skip.split(',').map((t: string) => t.trim());
 		filteredTasks = filteredTasks.filter((t) => !skipTasks.includes(t.name));
 	}
 

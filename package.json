@@ -38,6 +38,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^2.0.6",
 		"@playwright/test": "^1.53.1",
+		"@types/bun": "^1.2.18",
 		"axe-playwright": "^2.1.0"
 	}
 }
