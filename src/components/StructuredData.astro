@@ -21,11 +21,11 @@ const {
 	breadcrumbItems,
 } = Astro.props;
 
-let _structuredData: any = {};
+let structuredData: any = {};
 
 // WebSite構造化データ
 if (type === 'website') {
-	_structuredData = {
+	structuredData = {
 		'@context': 'https://schema.org',
 		'@type': 'WebSite',
 		name: SITE_TITLE,
@@ -44,7 +44,7 @@ if (type === 'website') {
 
 // Article構造化データ
 if (type === 'article' && title && publishDate) {
-	_structuredData = {
+	structuredData = {
 		'@context': 'https://schema.org',
 		'@type': 'BlogPosting',
 		headline: title,
@@ -72,7 +72,7 @@ if (type === 'article' && title && publishDate) {
 
 // BreadcrumbList構造化データ
 if (type === 'breadcrumb' && breadcrumbItems) {
-	_structuredData = {
+	structuredData = {
 		'@context': 'https://schema.org',
 		'@type': 'BreadcrumbList',
 		itemListElement: breadcrumbItems.map((item, index) => ({
