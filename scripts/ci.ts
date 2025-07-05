@@ -111,12 +111,12 @@ Examples:
 function filterTasks(): Task[] {
 	let filteredTasks = [...tasks];
 
-	if (values.only) {
+	if (values.only && typeof values.only === 'string') {
 		const onlyTasks = values.only.split(',').map((t: string) => t.trim());
 		filteredTasks = filteredTasks.filter((t) => onlyTasks.includes(t.name));
 	}
 
-	if (values.skip) {
+	if (values.skip && typeof values.skip === 'string') {
 		const skipTasks = values.skip.split(',').map((t: string) => t.trim());
 		filteredTasks = filteredTasks.filter((t) => !skipTasks.includes(t.name));
 	}
