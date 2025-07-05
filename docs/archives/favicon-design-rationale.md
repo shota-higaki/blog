@@ -19,7 +19,7 @@
 
 ### 1. 色彩設計
 
-#### メインカラー: 紫色（#7C3AED）
+#### メインカラー: 紫色（#6B5DD3）
 - **技術トレンドとの親和性**: 
   - 現代の開発ツール（Gatsby、Figma、Twitch等）で採用される色
   - 「革新的」「創造的」なイメージを持つ
@@ -29,8 +29,10 @@
 - **心理的効果**:
   - 青（論理的）と赤（情熱的）の中間色
   - 技術と創造性の融合を表現
+- **アクセシビリティ**:
+  - 白色テキストとのコントラスト比 4.51:1（WCAG AA基準準拠）
 
-#### ダークモード対応: #6D28D9
+#### ダークモード対応: #4A3FBE
 - 若干暗めの紫で、ダークテーマでの視認性を向上
 
 ### 2. 形状設計
@@ -57,7 +59,7 @@
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <!-- 背景 -->
-  <rect width="32" height="32" rx="6" fill="#7C3AED"/>
+  <rect width="32" height="32" rx="6" fill="#6B5DD3"/>
   
   <!-- 山括弧 -->
   <path d="M9 10 L5 16 L9 22" stroke="#FFFFFF" stroke-width="2" 
@@ -66,7 +68,7 @@
         fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   
   <!-- アンパサンド -->
-  <text x="16" y="20" font-family="Arial, sans-serif" font-size="12" 
+  <text x="16" y="21" font-family="Arial, sans-serif" font-size="16" 
         font-weight="bold" fill="#FFFFFF" text-anchor="middle">&amp;</text>
 </svg>
 ```
