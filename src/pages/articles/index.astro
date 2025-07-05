@@ -37,6 +37,26 @@ const posts = (await getCollection('blog'))
 			html.dark .articles-title {
 				color: white;
 			}
+			
+			/* リンクのホバー時のスタイル */
+			.group:hover h2 {
+				color: rgb(var(--accent-light-mode));
+			}
+			
+			html.dark .group:hover h2 {
+				color: rgb(var(--accent-light));
+			}
+			
+			/* フォーカス時のスタイル */
+			.group:focus {
+				outline: 2px solid rgb(var(--accent-light-mode));
+				outline-offset: -2px;
+				border-radius: 0.5rem;
+			}
+			
+			html.dark .group:focus {
+				outline-color: rgb(var(--accent-light));
+			}
 		</style>
 	</head>
 	<body class="bg-white dark:bg-zinc-900">
@@ -49,7 +69,7 @@ const posts = (await getCollection('blog'))
 					{
 						posts.map((post, index) => (
 							<article class={`${index === 0 ? 'md:col-span-2 lg:col-span-3' : ''} bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300`}>
-								<a href={`${import.meta.env.BASE_URL}/articles/${post.id}/`} class="group block">
+								<a href={`${import.meta.env.BASE_URL}/articles/${post.id}/`} class="group block -m-6 p-6 rounded-lg">
 									{post.data.heroImage && (
 										<Image 
 											width={720} 
@@ -59,7 +79,7 @@ const posts = (await getCollection('blog'))
 											class="w-full rounded-lg shadow-md group-hover:shadow-xl transition-shadow duration-300 mb-4 -mt-6 -mx-6"
 										/>
 									)}
-									<h2 class={`${index === 0 ? 'text-3xl' : 'text-xl'} font-bold mb-2 text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors ${post.data.heroImage ? 'mt-4' : ''}`}>
+									<h2 class={`${index === 0 ? 'text-3xl' : 'text-xl'} font-bold mb-2 text-gray-900 dark:text-gray-100 transition-colors ${post.data.heroImage ? 'mt-4' : ''}`}>
 										{post.data.title}
 									</h2>
 									<p class="text-gray-700 dark:text-gray-300 mb-2">{post.data.description}</p>
