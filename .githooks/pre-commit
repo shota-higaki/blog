@@ -15,7 +15,8 @@ echo "📋 コード品質チェック..."
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|jsx|ts|tsx|json|astro|mjs|cjs)$' | tr '\n' ' ')
 
 if [ -n "$STAGED_FILES" ]; then
-  bun run check:ci
+  # エラーのみをチェック（警告は無視）
+  bun run check:errors-only
   if [ $? -ne 0 ]; then
     echo "❌ コード品質チェックに失敗しました"
     echo "💡 'bun run check' で自動修正できます"

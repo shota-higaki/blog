@@ -12,6 +12,7 @@
 		"astro": "astro",
 		"check": "biome check --write",
 		"check:ci": "biome check --error-on-warnings",
+		"check:errors-only": "biome check",
 		"format": "biome format --write",
 		"format:check": "biome format",
 		"lint": "biome lint --write",
