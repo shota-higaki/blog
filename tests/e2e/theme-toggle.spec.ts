@@ -17,7 +17,7 @@ test.describe('Theme Toggle', () => {
 		await expect(html).not.toHaveClass(/dark/);
 
 		// テーマトグルボタンをクリック
-		const themeToggle = page.locator('button[aria-label*="テーマ"]');
+		const themeToggle = page.locator('#themeToggle');
 		await themeToggle.click();
 
 		// ダークモードに切り替わる
@@ -40,7 +40,7 @@ test.describe('Theme Toggle', () => {
 		await page.waitForURL('**/blog/articles/');
 
 		// ダークモードに設定
-		const themeToggle = page.locator('button[aria-label*="テーマ"]');
+		const themeToggle = page.locator('#themeToggle');
 		await themeToggle.click();
 
 		// 別のページに移動
@@ -57,7 +57,7 @@ test.describe('Theme Toggle', () => {
 		await page.goto('/blog/');
 		await page.waitForURL('**/blog/articles/');
 
-		const themeToggle = page.locator('button[aria-label*="テーマ"]');
+		const themeToggle = page.locator('#themeToggle');
 
 		// aria-labelが存在する
 		const ariaLabel = await themeToggle.getAttribute('aria-label');
@@ -77,7 +77,7 @@ test.describe('Theme Toggle', () => {
 		await page.goto('/blog/');
 		await page.waitForURL('**/blog/articles/');
 
-		const themeToggle = page.locator('button[aria-label*="テーマ"]');
+		const themeToggle = page.locator('#themeToggle');
 
 		// ライトモードでは月のアイコンが表示される
 		const moonIcon = themeToggle.locator('svg').first();
