@@ -26,7 +26,7 @@ test.describe('SEO and Meta Tags', () => {
 		expect(ogImage).toContain('/og-image.svg');
 
 		// Twitter Cardタグ
-		const twitterCard = await page.locator('meta[name="twitter:card"]').getAttribute('content');
+		const twitterCard = await page.locator('meta[property="twitter:card"]').getAttribute('content');
 		expect(twitterCard).toBe('summary_large_image');
 	});
 
@@ -95,6 +95,6 @@ test.describe('SEO and Meta Tags', () => {
 		await page.waitForURL('**/blog/articles/');
 
 		const viewport = await page.locator('meta[name="viewport"]').getAttribute('content');
-		expect(viewport).toBe('width=device-width, initial-scale=1');
+		expect(viewport).toBe('width=device-width,initial-scale=1');
 	});
 });

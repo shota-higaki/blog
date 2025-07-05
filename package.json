@@ -7,7 +7,7 @@
 	},
 	"scripts": {
 		"dev": "astro dev",
-		"build": "astro build",
+		"build": "rm -rf dist && astro build",
 		"preview": "astro preview",
 		"astro": "astro",
 		"check": "biome check --write",
@@ -19,7 +19,7 @@
 		"typecheck": "astro check",
 		"test": "bun run test:all",
 		"test:all": "bun run test:unit && bun run test:e2e",
-		"test:unit": "vitest",
+		"test:unit": "vitest run",
 		"test:unit:ui": "vitest --ui",
 		"test:unit:coverage": "vitest --coverage",
 		"test:e2e": "playwright test",

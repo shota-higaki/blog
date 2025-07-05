@@ -58,13 +58,7 @@ test.describe('Security Features', () => {
 	});
 
 	test('should have console warning script', async ({ page }) => {
-		await page.goto('/blog/');
-
-		// console-warning.jsが読み込まれている
-		const consoleWarningScript = await page.locator('script[src*="console-warning.js"]').count();
-		expect(consoleWarningScript).toBe(1);
-
-		// コンソールに警告メッセージが表示される
+		// コンソールメッセージを監視
 		const consoleMessages: string[] = [];
 		page.on('console', (msg) => {
 			if (msg.type() === 'log' || msg.type() === 'warning') {
@@ -72,9 +66,12 @@ test.describe('Security Features', () => {
 			}
 		});
 
-		// ページをリロードしてスクリプトを実行
-		await page.reload();
-		await page.waitForTimeout(500);
+		await page.goto('/blog/');
+		await page.waitForURL('**/blog/articles/');
+
+		// console-warning.jsが読み込まれている
+		const consoleWarningScript = await page.locator('script[src*="console-warning.js"]').count();
+		expect(consoleWarningScript).toBe(1);
 
 		// 警告メッセージが含まれているか確認
 		const hasWarningMessage = consoleMessages.some(

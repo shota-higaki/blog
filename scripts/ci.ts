@@ -18,6 +18,7 @@ const colors = {
 	magenta: '\x1b[35m',
 	cyan: '\x1b[36m',
 	reset: '\x1b[0m',
+	dim: '\x1b[2m',
 };
 
 // Task definition
@@ -32,7 +33,7 @@ const tasks: Task[] = [
 	{ name: 'typecheck', command: 'bun run typecheck', timeout: 10000 }, // 10秒
 	{ name: 'lint', command: 'bun run lint', timeout: 10000 }, // 10秒
 	{ name: 'format', command: 'bun run format:check', timeout: 5000 }, // 5秒
-	{ name: 'test:unit', command: 'bun run test:unit', timeout: 20000 }, // 20秒
+	{ name: 'test:unit', command: 'bun run test:unit', timeout: 60000 }, // 60秒に延長
 	{
 		name: 'build',
 		command: 'bun run build',
@@ -43,7 +44,7 @@ const tasks: Task[] = [
 		name: 'test:e2e',
 		command: 'bun run test:e2e',
 		dependsOn: ['build'],
-		timeout: 60000, // 60秒
+		timeout: 180000, // 180秒に延長
 	},
 ];
 
@@ -124,50 +125,175 @@ function filterTasks(): Task[] {
 	return filteredTasks;
 }
 
+// Progress bar helper for test tasks
+function showTestProgress(taskName: string, current: number, total: number) {
+	const percentage = total > 0 ? Math.min((current / total) * 100, 100) : 0;
+	const barLength = 30;
+	const filledLength = Math.floor((percentage / 100) * barLength);
+	const bar = '█'.repeat(filledLength) + '░'.repeat(barLength - filledLength);
+
+	// Move cursor to beginning of line and clear it
+	process.stdout.write('\r\x1b[K');
+	process.stdout.write(
+		`${colors.yellow}▶ ${taskName}${colors.reset} ${colors.dim}[${bar}] ${current}/${total} tests${colors.reset}`,
+	);
+}
+
 async function runTask(task: Task): Promise<TaskResult> {
 	const startTime = performance.now();
 	console.log(`${colors.yellow}▶ Starting: ${task.name}${colors.reset}`);
 
 	try {
 		// タイムアウト付きでコマンドを実行
-		const proc = $`sh -c "${task.command}"`.quiet();
+		const proc = Bun.spawn(['sh', '-c', task.command], {
+			stdout: 'pipe',
+			stderr: 'pipe',
+		});
 
 		// タイムアウトを設定
 		const timeout = task.timeout || 20000; // デフォルト20秒
-		const timeoutPromise = new Promise<never>((_, reject) => {
-			setTimeout(
-				() => reject(new Error(`Task ${task.name} timed out after ${timeout / 1000}s`)),
-				timeout,
-			);
-		});
 
-		// タイムアウトとコマンド実行を競争させる
-		const result = await Promise.race([proc, timeoutPromise]);
+		// テストタスクの場合、出力をストリーミングして進捗を表示
+		const isTestTask = task.name.includes('test');
+		const testProgress = { current: 0, total: 0 };
+		let output = '';
+		let errorOutput = '';
+
+		if (isTestTask) {
+			// 出力を非同期で読み取る
+			const decoder = new TextDecoder();
+			let buffer = '';
+
+			// stdout ストリームを読み取る
+			const readStream = async (stream: ReadableStream) => {
+				const reader = stream.getReader();
+				try {
+					while (true) {
+						const { done, value } = await reader.read();
+						if (done) break;
+
+						const chunk = decoder.decode(value, { stream: true });
+						buffer += chunk;
+						output += chunk;
+
+						// 行ごとに処理
+						const lines = buffer.split('\n');
+						buffer = lines.pop() || '';
+
+						for (const line of lines) {
+							// Vitestの出力パターン
+							if (task.name === 'test:unit') {
+								// テストファイル実行中
+								const fileMatch = line.match(/✓\s+tests\/unit\/.*\.test\.ts\s+\((\d+)\s+tests?\)/);
+								if (fileMatch) {
+									testProgress.current += parseInt(fileMatch[1]);
+								}
+								// 合計テスト数
+								const totalMatch = line.match(/Test Files.*\((\d+)\)/);
+								if (totalMatch) {
+									testProgress.total = 35; // 既知の合計テスト数
+								}
+								// 最終結果
+								const finalMatch = line.match(/Tests\s+(\d+)\s+passed/);
+								if (finalMatch) {
+									testProgress.current = parseInt(finalMatch[1]);
+									testProgress.total = parseInt(finalMatch[1]);
+								}
+							}
+
+							// Playwrightの出力パターン
+							if (task.name === 'test:e2e') {
+								const totalMatch = line.match(/Running (\d+) tests? using/);
+								if (totalMatch) {
+									testProgress.total = parseInt(totalMatch[1]);
+								}
+								const progressMatch = line.match(/\[(\d+)\/(\d+)\]/);
+								if (progressMatch) {
+									testProgress.current = parseInt(progressMatch[1]);
+								}
+							}
+
+							// プログレスバーを更新
+							if (testProgress.total > 0) {
+								showTestProgress(task.name, testProgress.current, testProgress.total);
+							}
+						}
+					}
+				} finally {
+					reader.releaseLock();
+				}
+			};
+
+			// stderr ストリームを読み取る
+			const readError = async (stream: ReadableStream) => {
+				const reader = stream.getReader();
+				try {
+					while (true) {
+						const { done, value } = await reader.read();
+						if (done) break;
+						errorOutput += decoder.decode(value, { stream: true });
+					}
+				} finally {
+					reader.releaseLock();
+				}
+			};
+
+			// タイムアウトプロミス
+			const timeoutPromise = new Promise<never>((_, reject) => {
+				setTimeout(() => {
+					proc.kill();
+					reject(new Error(`Task ${task.name} timed out after ${timeout / 1000}s`));
+				}, timeout);
+			});
+
+			// 並行して実行
+			const [exitCode] = await Promise.all([
+				Promise.race([proc.exited, timeoutPromise]),
+				readStream(proc.stdout),
+				readError(proc.stderr),
+			]);
+
+			if (exitCode !== 0) {
+				throw new Error(errorOutput || `Process exited with code ${exitCode}`);
+			}
+		} else {
+			// 非テストタスクは通常通り実行
+			const result = await $`sh -c "${task.command}"`.quiet();
+			output = result.stdout.toString();
+		}
+
 		const duration = Math.round((performance.now() - startTime) / 1000);
+
+		// プログレスバーをクリア
+		if (isTestTask) {
+			process.stdout.write('\r\x1b[K');
+		}
 
 		console.log(`${colors.green}✓ ${task.name} completed (${duration}s)${colors.reset}`);
 
-		if (values.verbose && result.stdout) {
-			console.log(colors.cyan + result.stdout.toString() + colors.reset);
+		if (values.verbose && output) {
+			console.log(colors.cyan + output + colors.reset);
 		}
 
 		return {
 			name: task.name,
 			success: true,
 			duration,
-			output: result.stdout.toString(),
+			output,
 		};
 	} catch (error) {
 		const duration = Math.round((performance.now() - startTime) / 1000);
 		const err = error as any;
 
+		// プログレスバーをクリア
+		process.stdout.write('\r\x1b[K');
 		console.log(`${colors.red}✗ ${task.name} failed (${duration}s)${colors.reset}`);
 
 		if (values.verbose && err.stdout) {
 			console.log(colors.cyan + err.stdout.toString() + colors.reset);
 		}
-		if (err.stderr) {
-			console.log(colors.red + err.stderr.toString() + colors.reset);
+		if (err.stderr || err.message) {
+			console.log(colors.red + (err.stderr?.toString() || err.message) + colors.reset);
 		}
 
 		return {

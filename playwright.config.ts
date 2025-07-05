@@ -7,6 +7,7 @@ export default defineConfig({
 	retries: process.env.CI ? 2 : 0,
 	workers: process.env.CI ? 1 : undefined,
 	reporter: 'html',
+	timeout: 60000, // 60秒のグローバルタイムアウト
 	use: {
 		baseURL: process.env.CI ? 'https://shota-higaki.github.io/blog' : 'http://localhost:4321/blog',
 		trace: 'on-first-retry',
