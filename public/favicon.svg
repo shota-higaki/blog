@@ -1,17 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <!-- Background -->
-  <rect width="32" height="32" rx="6" fill="#7C3AED"/>
+  <rect width="32" height="32" rx="6" fill="#6B5DD3"/>
   
   <!-- Code brackets -->
   <path d="M9 10 L5 16 L9 22" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M23 10 L27 16 L23 22" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   
   <!-- Ampersand -->
-  <text x="16" y="20" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">&amp;</text>
+  <text x="16" y="21" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">&amp;</text>
   
   <style>
     @media (prefers-color-scheme: dark) {
-      rect { fill: #6D28D9; }
+      rect { fill: #4A3FBE; }
     }
   </style>
 </svg>

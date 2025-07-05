@@ -17,9 +17,24 @@ const _isActive =
 	a {
 		display: inline-block;
 		text-decoration: none;
+		color: rgb(var(--color-text));
+		transition: all 0.2s ease;
+		padding: 0.25rem 0.5rem;
+		border-radius: 0.25rem;
+	}
+	a:hover {
+		color: rgb(var(--accent-light-mode));
+		background-color: rgb(var(--accent-light-mode) / 0.1);
+	}
+	a:focus {
+		outline: 2px solid rgb(var(--accent-light-mode));
+		outline-offset: 2px;
 	}
 	a.active {
 		font-weight: bolder;
+		color: rgb(var(--accent-light-mode));
 		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.2em;
 	}
 </style>

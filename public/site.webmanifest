@@ -4,7 +4,7 @@
 	"description": "技術と日常を繋ぐ個人ブログ",
 	"start_url": "/blog/",
 	"display": "minimal-ui",
-	"theme_color": "#7C3AED",
+	"theme_color": "#6B5DD3",
 	"background_color": "#ffffff",
 	"icons": [
 		{
