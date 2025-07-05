@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+echo "🔒 pre-commit フックを実行中..."
+
+# セキュリティチェック
+echo "📋 セキュリティチェック..."
+bun run scripts/security-check.ts --staged
+if [ $? -ne 0 ]; then
+  echo "❌ セキュリティチェックに失敗しました"
+  exit 1
+fi
+
+# Biomeチェック（ステージングされたファイルのみ）
+echo "📋 コード品質チェック..."
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|jsx|ts|tsx|json|astro|mjs|cjs)$' | tr '\n' ' ')
+
+if [ -n "$STAGED_FILES" ]; then
+  bun run check:ci
+  if [ $? -ne 0 ]; then
+    echo "❌ コード品質チェックに失敗しました"
+    echo "💡 'bun run check' で自動修正できます"
+    exit 1
+  fi
+fi
+
+echo "✅ pre-commit チェック完了！"

@@ -43,6 +43,7 @@ jobs:
             --base "${{ steps.pages.outputs.base_path }}"
         env:
           SITE: ${{ steps.pages.outputs.origin }}
+          PUBLIC_GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

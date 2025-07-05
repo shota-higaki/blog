@@ -2,8 +2,6 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
-import { SITE_TITLE } from '../consts';
-import StructuredData from './StructuredData.astro';
 
 interface Props {
 	title: string;
@@ -11,10 +9,10 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
-const ogImage = 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
+const _ogImage = 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
 
 // Critical CSS for above-the-fold content
-const criticalCSS = `
+const _criticalCSS = `
 :root {
 	--font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 	--font-mono: "Menlo", "Monaco", "Courier New", monospace;

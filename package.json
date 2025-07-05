@@ -19,7 +19,9 @@
 		"test": "playwright test",
 		"test:ui": "playwright test --ui",
 		"test:headed": "playwright test --headed",
-		"ci": "bun scripts/ci.ts"
+		"ci": "bun scripts/ci.ts",
+		"security:check": "bun run scripts/security-check.ts",
+		"hooks:setup": "bun run scripts/setup-hooks.ts"
 	},
 	"dependencies": {
 		"@astrojs/check": "^0.9.4",

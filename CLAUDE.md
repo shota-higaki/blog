@@ -62,6 +62,7 @@
 ### デプロイ
 
 - GitHub Actionsにより、mainブランチへのプッシュ時に自動でデプロイされます
+- 本番環境でのGoogle Analytics測定IDは GitHub Secrets で管理
 
 ## コマンド一覧
 
@@ -94,7 +95,42 @@ bun run test
 bun run ci
 ```
 
+## アナリティクス
+
+- Google Analytics 4を導入済み
+- 本番環境でのみトラッキングが有効（開発環境では無効）
+- 測定IDは環境変数で管理：
+  - ローカル: `.env.local` の `PUBLIC_GA_MEASUREMENT_ID`
+  - 本番: GitHub Secrets の `GA_MEASUREMENT_ID`
+
+## セキュリティ
+
+### pre-commitフック
+機密情報の漏洩を防ぐため、pre-commitフックでセキュリティチェックを実行：
+
+```bash
+# 初回セットアップ（一度だけ実行）
+bun run hooks:setup
+```
+
+以下の情報を検出します：
+- Google Analytics ID (G-XXXXXXXXXX形式)
+- APIキー
+- AWS アクセスキー
+- 秘密鍵
+
+### セキュリティチェックコマンド
+
+```bash
+# 全ファイルをチェック
+bun run security:check
+
+# ステージングされたファイルのみチェック
+bun run security:check --staged
+```
+
 ## 注意事項
 
 - 記事執筆のガイドラインは[writing-guidelines.md](./docs/writing-guidelines.md)を参照してください
 - パフォーマンス最適化については常に考慮し、Lighthouseスコアを維持してください
+- 開発環境構築の詳細は[development-setup.md](./docs/development-setup.md)を参照してください
