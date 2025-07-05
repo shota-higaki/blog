@@ -21,11 +21,8 @@ test.describe('Accessibility', () => {
 		await injectAxe(page);
 		// Check with reduced rules to avoid task list label issues
 		await checkA11y(page, undefined, {
-			rules: {
-				label: { enabled: false }, // Disable label check for task lists
-				'color-contrast': { enabled: false }, // Temporarily disable color contrast
-			},
-		});
+			disableRules: ['label', 'color-contrast'], // Disable label check for task lists and color contrast
+		} as any);
 	});
 
 	// ホームページはリダイレクトのみなのでheading hierarchyテストは削除

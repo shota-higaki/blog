@@ -1,6 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-
 interface Props {
 	src: string;
 	alt: string;
@@ -13,7 +11,7 @@ interface Props {
 const { src, alt, width, height, loading = 'lazy', class: className } = Astro.props;
 ---
 
-<Image
+<img
 	src={src}
 	alt={alt}
 	width={width}
@@ -21,6 +19,4 @@ const { src, alt, width, height, loading = 'lazy', class: className } = Astro.pr
 	loading={loading}
 	decoding="async"
 	class={className}
-	format="webp"
-	quality={80}
 />
