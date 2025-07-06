@@ -88,6 +88,25 @@ test.describe('Offline Page and Service Worker', () => {
 		await expect(rightBtn).toHaveAttribute('aria-label', '右に移動');
 	});
 
+	test('should handle landscape orientation', async ({ page }) => {
+		// 横向きモバイルビューポート
+		await page.setViewportSize({ width: 667, height: 375 });
+		await page.goto('/blog/offline.html');
+
+		// ゲームが表示される
+		const gameCanvas = page.locator('#gameCanvas');
+		await expect(gameCanvas).toBeVisible();
+
+		// タッチコントロールが表示される
+		const touchControls = page.locator('#touchControls');
+		await expect(touchControls).toBeVisible();
+
+		// ゲームコンテナの高さが調整されているか
+		const gameContainer = page.locator('.game-container');
+		const containerBox = await gameContainer.boundingBox();
+		expect(containerBox?.height).toBeLessThan(300);
+	});
+
 	test('should be responsive', async ({ page }) => {
 		await page.goto('/blog/offline.html');
 
@@ -109,6 +128,20 @@ test.describe('Offline Page and Service Worker', () => {
 		// タッチコントロールがモバイルでのみ表示
 		const touchControls = page.locator('#touchControls');
 		await expect(touchControls).toBeVisible();
+
+		// タッチボタンが適切に配置されているか確認
+		const leftBtn = page.locator('#leftBtn');
+		const rightBtn = page.locator('#rightBtn');
+		const leftBtnBox = await leftBtn.boundingBox();
+		const rightBtnBox = await rightBtn.boundingBox();
+
+		// ボタンが画面内に収まっているか
+		expect(leftBtnBox?.x).toBeGreaterThanOrEqual(0);
+		expect(rightBtnBox?.x).toBeLessThan(375);
+
+		// ボタン間に適切な間隔があるか
+		const spacing = (rightBtnBox?.x || 0) - ((leftBtnBox?.x || 0) + (leftBtnBox?.width || 0));
+		expect(spacing).toBeGreaterThan(50);
 	});
 
 	test('should handle game over state', async ({ page }) => {
