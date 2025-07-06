@@ -1,0 +1,654 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import GoogleAnalytics from '../components/GoogleAnalytics.astro';
+import Header from '../components/Header.astro';
+import ServiceWorker from '../components/ServiceWorker.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead title="オフライン | Code & Living" description="インターネット接続がありません。ゲームをプレイしながらお待ちください。" />
+		<GoogleAnalytics />
+		<ServiceWorker />
+		<style>
+			/* オフラインページ専用のスタイル */
+			.offline-container {
+				min-height: calc(100vh - 80px); /* ヘッダー分を引く */
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				padding: 1rem;
+				text-align: center;
+			}
+
+			.offline-content {
+				width: 100%;
+				max-width: 800px;
+				margin: 0 auto;
+			}
+
+			.offline-title {
+				font-size: 2rem;
+				font-weight: bold;
+				color: rgb(var(--accent-light-mode));
+				margin-bottom: 1rem;
+			}
+
+			html.dark .offline-title {
+				color: rgb(var(--accent));
+			}
+
+			.offline-message {
+				font-size: 1.25rem;
+				color: rgb(var(--gray));
+				margin-bottom: 2rem;
+			}
+
+			html.dark .offline-message {
+				color: rgb(var(--gray-light));
+			}
+
+			/* ゲームキャンバス */
+			#gameCanvas {
+				border: 2px solid rgb(var(--accent-light-mode));
+				border-radius: 8px;
+				background: rgba(0, 0, 0, 0.9);
+				display: block;
+				margin: 0 auto 1.5rem;
+				max-width: 100%;
+				height: auto;
+				touch-action: none; /* タッチ操作の誤動作を防ぐ */
+			}
+
+			html.dark #gameCanvas {
+				border-color: rgb(var(--accent));
+			}
+
+			/* ゲーム情報 */
+			.game-info {
+				display: flex;
+				justify-content: space-around;
+				flex-wrap: wrap;
+				gap: 1rem;
+				margin-bottom: 1.5rem;
+				font-size: 1.125rem;
+			}
+
+			.game-stat {
+				padding: 0.5rem 1rem;
+				background: rgba(var(--accent-light-mode), 0.1);
+				border-radius: 0.5rem;
+				font-weight: 600;
+			}
+
+			html.dark .game-stat {
+				background: rgba(var(--accent), 0.1);
+			}
+
+			/* コントロール説明 */
+			.controls {
+				background: rgba(var(--gray-light), 0.1);
+				border-radius: 0.5rem;
+				padding: 1.5rem;
+				margin-bottom: 2rem;
+			}
+
+			.controls-title {
+				font-size: 1.25rem;
+				font-weight: 600;
+				margin-bottom: 1rem;
+				color: rgb(var(--gray-dark));
+			}
+
+			html.dark .controls-title {
+				color: rgb(var(--gray-light));
+			}
+
+			.controls-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+				gap: 1rem;
+				text-align: left;
+			}
+
+			.control-item {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+			}
+
+			.control-key {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0.25rem 0.5rem;
+				background: rgb(var(--gray-dark));
+				color: white;
+				border-radius: 0.25rem;
+				font-family: monospace;
+				font-size: 0.875rem;
+				min-width: 2rem;
+			}
+
+			html.dark .control-key {
+				background: rgb(var(--gray));
+			}
+
+			/* モバイル用タッチコントロール */
+			.touch-controls {
+				display: none;
+				position: fixed;
+				bottom: 20px;
+				left: 50%;
+				transform: translateX(-50%);
+				gap: 1rem;
+				z-index: 10;
+			}
+
+			.touch-button {
+				width: 60px;
+				height: 60px;
+				border-radius: 50%;
+				background: rgba(var(--accent-light-mode), 0.8);
+				border: 2px solid rgb(var(--accent-light-mode));
+				color: white;
+				font-size: 1.5rem;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				touch-action: manipulation;
+				transition: transform 0.1s;
+			}
+
+			html.dark .touch-button {
+				background: rgba(var(--accent), 0.8);
+				border-color: rgb(var(--accent));
+			}
+
+			.touch-button:active {
+				transform: scale(0.9);
+			}
+
+			/* レスポンシブ対応 */
+			@media (max-width: 768px) {
+				.offline-container {
+					min-height: calc(100vh - 60px);
+				}
+
+				.offline-title {
+					font-size: 1.5rem;
+				}
+
+				.offline-message {
+					font-size: 1rem;
+				}
+
+				#gameCanvas {
+					margin-bottom: 4rem; /* タッチコントロール分のスペース */
+				}
+
+				.touch-controls {
+					display: flex;
+				}
+
+				.controls {
+					padding: 1rem;
+				}
+
+				.controls-title {
+					font-size: 1rem;
+				}
+
+				.game-info {
+					font-size: 1rem;
+				}
+
+				.game-stat {
+					padding: 0.375rem 0.75rem;
+				}
+			}
+
+			@media (max-width: 480px) {
+				.controls-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+
+			/* アニメーション */
+			@keyframes fadeIn {
+				from {
+					opacity: 0;
+					transform: translateY(20px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			.offline-content > * {
+				animation: fadeIn 0.6s ease-out forwards;
+				opacity: 0;
+			}
+
+			.offline-content > *:nth-child(1) { animation-delay: 0.1s; }
+			.offline-content > *:nth-child(2) { animation-delay: 0.2s; }
+			.offline-content > *:nth-child(3) { animation-delay: 0.3s; }
+			.offline-content > *:nth-child(4) { animation-delay: 0.4s; }
+			.offline-content > *:nth-child(5) { animation-delay: 0.5s; }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="offline-container">
+			<div class="offline-content">
+				<h1 class="offline-title">オフラインです</h1>
+				<p class="offline-message">インターネット接続がありません<br>ゲームをプレイしながらお待ちください</p>
+				
+				<canvas id="gameCanvas" width="400" height="500"></canvas>
+				
+				<div class="game-info">
+					<div class="game-stat">スコア: <span id="score">0</span></div>
+					<div class="game-stat">レベル: <span id="level">1</span></div>
+					<div class="game-stat">ライフ: <span id="lives">3</span></div>
+				</div>
+
+				<div class="controls">
+					<h2 class="controls-title">操作方法</h2>
+					<div class="controls-grid">
+						<div class="control-item">
+							<span class="control-key">←</span>
+							<span class="control-key">→</span>
+							<span>プレイヤーを移動</span>
+						</div>
+						<div class="control-item">
+							<span class="control-key">Space</span>
+							<span>文字をキャッチ</span>
+						</div>
+						<div class="control-item">
+							<span class="control-key">P</span>
+							<span>一時停止 / 再開</span>
+						</div>
+						<div class="control-item">
+							<span class="control-key">R</span>
+							<span>ゲームをリスタート</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- モバイル用タッチコントロール -->
+		<div class="touch-controls">
+			<button class="touch-button" id="leftBtn" aria-label="左に移動">←</button>
+			<button class="touch-button" id="catchBtn" aria-label="キャッチ">⚡</button>
+			<button class="touch-button" id="rightBtn" aria-label="右に移動">→</button>
+		</div>
+
+		<Footer />
+		<ThemeToggle />
+
+		<script>
+			// Code Rainゲームの実装
+			const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
+			const ctx = canvas.getContext('2d')!;
+			const scoreElement = document.getElementById('score')!;
+			const levelElement = document.getElementById('level')!;
+			const livesElement = document.getElementById('lives')!;
+
+			// レスポンシブ対応のためのキャンバスサイズ調整
+			function resizeCanvas() {
+				const container = canvas.parentElement!;
+				const maxWidth = Math.min(container.clientWidth - 32, 600); // 最大幅600px
+				const aspectRatio = 500 / 400; // 高さ/幅
+				
+				canvas.style.width = maxWidth + 'px';
+				canvas.style.height = (maxWidth * aspectRatio) + 'px';
+			}
+
+			resizeCanvas();
+			window.addEventListener('resize', resizeCanvas);
+
+			// ゲームの状態
+			let gameState = {
+				score: 0,
+				level: 1,
+				lives: 3,
+				isPaused: false,
+				isGameOver: false,
+				player: {
+					x: canvas.width / 2,
+					y: canvas.height - 50,
+					width: 40,
+					height: 40,
+					speed: 5
+				},
+				characters: [] as Array<{
+					x: number;
+					y: number;
+					char: string;
+					speed: number;
+					isGood: boolean;
+				}>,
+				particles: [] as Array<{
+					x: number;
+					y: number;
+					vx: number;
+					vy: number;
+					life: number;
+					color: string;
+				}>
+			};
+
+			// 文字の種類
+			const goodChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<>{}[]()';
+			const badChars = '!@#$%^&*';
+
+			// 新しい文字を生成
+			function spawnCharacter() {
+				const isGood = Math.random() > 0.3; // 70%は良い文字
+				const chars = isGood ? goodChars : badChars;
+				const char = chars[Math.floor(Math.random() * chars.length)];
+				
+				gameState.characters.push({
+					x: Math.random() * (canvas.width - 20) + 10,
+					y: -20,
+					char: char,
+					speed: 1 + gameState.level * 0.5 + Math.random() * 2,
+					isGood: isGood
+				});
+			}
+
+			// パーティクル効果を生成
+			function createParticles(x: number, y: number, color: string) {
+				for (let i = 0; i < 10; i++) {
+					gameState.particles.push({
+						x: x,
+						y: y,
+						vx: (Math.random() - 0.5) * 5,
+						vy: (Math.random() - 0.5) * 5,
+						life: 30,
+						color: color
+					});
+				}
+			}
+
+			// ゲームの更新
+			function update() {
+				if (gameState.isPaused || gameState.isGameOver) return;
+
+				// 文字の更新
+				gameState.characters = gameState.characters.filter(char => {
+					char.y += char.speed;
+					
+					// プレイヤーとの衝突判定
+					if (
+						char.x > gameState.player.x - gameState.player.width / 2 &&
+						char.x < gameState.player.x + gameState.player.width / 2 &&
+						char.y > gameState.player.y - gameState.player.height / 2 &&
+						char.y < gameState.player.y + gameState.player.height / 2
+					) {
+						if (char.isGood) {
+							gameState.score += 10;
+							createParticles(char.x, char.y, '#00ff00');
+						} else {
+							gameState.lives--;
+							createParticles(char.x, char.y, '#ff0000');
+							if (gameState.lives <= 0) {
+								gameState.isGameOver = true;
+							}
+						}
+						return false;
+					}
+					
+					// 画面外に出た場合
+					if (char.y > canvas.height) {
+						if (char.isGood) {
+							gameState.lives--;
+							if (gameState.lives <= 0) {
+								gameState.isGameOver = true;
+							}
+						}
+						return false;
+					}
+					
+					return true;
+				});
+
+				// パーティクルの更新
+				gameState.particles = gameState.particles.filter(particle => {
+					particle.x += particle.vx;
+					particle.y += particle.vy;
+					particle.life--;
+					return particle.life > 0;
+				});
+
+				// レベルアップ
+				if (gameState.score > 0 && gameState.score % 100 === 0) {
+					gameState.level = Math.floor(gameState.score / 100) + 1;
+				}
+
+				// 新しい文字を生成
+				if (Math.random() < 0.02 + gameState.level * 0.005) {
+					spawnCharacter();
+				}
+
+				// UI更新
+				scoreElement.textContent = gameState.score.toString();
+				levelElement.textContent = gameState.level.toString();
+				livesElement.textContent = gameState.lives.toString();
+			}
+
+			// 描画
+			function draw() {
+				// 背景をクリア
+				ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+				// グリッド背景
+				ctx.strokeStyle = 'rgba(133, 116, 242, 0.1)';
+				ctx.lineWidth = 1;
+				for (let i = 0; i < canvas.width; i += 20) {
+					ctx.beginPath();
+					ctx.moveTo(i, 0);
+					ctx.lineTo(i, canvas.height);
+					ctx.stroke();
+				}
+				for (let i = 0; i < canvas.height; i += 20) {
+					ctx.beginPath();
+					ctx.moveTo(0, i);
+					ctx.lineTo(canvas.width, i);
+					ctx.stroke();
+				}
+
+				// プレイヤーを描画
+				ctx.save();
+				ctx.translate(gameState.player.x, gameState.player.y);
+				ctx.fillStyle = '#8574f2';
+				ctx.fillRect(-gameState.player.width / 2, -gameState.player.height / 2, gameState.player.width, gameState.player.height);
+				
+				// プレイヤーのアイコン
+				ctx.fillStyle = '#fff';
+				ctx.font = '20px monospace';
+				ctx.textAlign = 'center';
+				ctx.textBaseline = 'middle';
+				ctx.fillText('< >', 0, 0);
+				ctx.restore();
+
+				// 文字を描画
+				gameState.characters.forEach(char => {
+					ctx.save();
+					ctx.fillStyle = char.isGood ? '#00ff00' : '#ff0000';
+					ctx.font = '20px monospace';
+					ctx.textAlign = 'center';
+					ctx.textBaseline = 'middle';
+					ctx.fillText(char.char, char.x, char.y);
+					
+					// グロー効果
+					ctx.shadowColor = char.isGood ? '#00ff00' : '#ff0000';
+					ctx.shadowBlur = 10;
+					ctx.fillText(char.char, char.x, char.y);
+					ctx.restore();
+				});
+
+				// パーティクルを描画
+				gameState.particles.forEach(particle => {
+					ctx.save();
+					ctx.globalAlpha = particle.life / 30;
+					ctx.fillStyle = particle.color;
+					ctx.fillRect(particle.x - 2, particle.y - 2, 4, 4);
+					ctx.restore();
+				});
+
+				// ゲームオーバー表示
+				if (gameState.isGameOver) {
+					ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+					ctx.fillRect(0, 0, canvas.width, canvas.height);
+					
+					ctx.fillStyle = '#fff';
+					ctx.font = 'bold 40px sans-serif';
+					ctx.textAlign = 'center';
+					ctx.textBaseline = 'middle';
+					ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 40);
+					
+					ctx.font = '20px sans-serif';
+					ctx.fillText(`最終スコア: ${gameState.score}`, canvas.width / 2, canvas.height / 2);
+					ctx.fillText('Rキーでリスタート', canvas.width / 2, canvas.height / 2 + 40);
+				}
+
+				// 一時停止表示
+				if (gameState.isPaused && !gameState.isGameOver) {
+					ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+					ctx.fillRect(0, 0, canvas.width, canvas.height);
+					
+					ctx.fillStyle = '#fff';
+					ctx.font = 'bold 30px sans-serif';
+					ctx.textAlign = 'center';
+					ctx.textBaseline = 'middle';
+					ctx.fillText('一時停止中', canvas.width / 2, canvas.height / 2);
+				}
+			}
+
+			// ゲームループ
+			function gameLoop() {
+				update();
+				draw();
+				requestAnimationFrame(gameLoop);
+			}
+
+			// キーボード入力
+			const keys: { [key: string]: boolean } = {};
+
+			document.addEventListener('keydown', (e) => {
+				keys[e.key] = true;
+				
+				if (e.key === 'p' || e.key === 'P') {
+					gameState.isPaused = !gameState.isPaused;
+				}
+				
+				if (e.key === 'r' || e.key === 'R') {
+					resetGame();
+				}
+			});
+
+			document.addEventListener('keyup', (e) => {
+				keys[e.key] = false;
+			});
+
+			// プレイヤーの移動
+			function movePlayer() {
+				if (gameState.isPaused || gameState.isGameOver) return;
+				
+				if (keys['ArrowLeft'] && gameState.player.x > gameState.player.width / 2) {
+					gameState.player.x -= gameState.player.speed;
+				}
+				if (keys['ArrowRight'] && gameState.player.x < canvas.width - gameState.player.width / 2) {
+					gameState.player.x += gameState.player.speed;
+				}
+			}
+
+			// タッチコントロール
+			const leftBtn = document.getElementById('leftBtn');
+			const rightBtn = document.getElementById('rightBtn');
+			const catchBtn = document.getElementById('catchBtn');
+
+			let touchInterval: number | null = null;
+
+			function startTouch(direction: 'left' | 'right') {
+				if (touchInterval) clearInterval(touchInterval);
+				touchInterval = setInterval(() => {
+					if (gameState.isPaused || gameState.isGameOver) return;
+					
+					if (direction === 'left' && gameState.player.x > gameState.player.width / 2) {
+						gameState.player.x -= gameState.player.speed;
+					}
+					if (direction === 'right' && gameState.player.x < canvas.width - gameState.player.width / 2) {
+						gameState.player.x += gameState.player.speed;
+					}
+				}, 16) as unknown as number;
+			}
+
+			function stopTouch() {
+				if (touchInterval) {
+					clearInterval(touchInterval);
+					touchInterval = null;
+				}
+			}
+
+			leftBtn?.addEventListener('touchstart', (e) => {
+				e.preventDefault();
+				startTouch('left');
+			});
+
+			rightBtn?.addEventListener('touchstart', (e) => {
+				e.preventDefault();
+				startTouch('right');
+			});
+
+			leftBtn?.addEventListener('touchend', stopTouch);
+			rightBtn?.addEventListener('touchend', stopTouch);
+			leftBtn?.addEventListener('touchcancel', stopTouch);
+			rightBtn?.addEventListener('touchcancel', stopTouch);
+
+			catchBtn?.addEventListener('click', () => {
+				if (gameState.isGameOver) {
+					resetGame();
+				} else {
+					gameState.isPaused = !gameState.isPaused;
+				}
+			});
+
+			// ゲームリセット
+			function resetGame() {
+				gameState = {
+					score: 0,
+					level: 1,
+					lives: 3,
+					isPaused: false,
+					isGameOver: false,
+					player: {
+						x: canvas.width / 2,
+						y: canvas.height - 50,
+						width: 40,
+						height: 40,
+						speed: 5
+					},
+					characters: [],
+					particles: []
+				};
+			}
+
+			// プレイヤー移動の更新ループ
+			setInterval(movePlayer, 16);
+
+			// ゲーム開始
+			gameLoop();
+		</script>
+	</body>
+</html>
