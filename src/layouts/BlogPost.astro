@@ -84,5 +84,41 @@ const { title, description, publishDate, updatedDate, heroImage, heroImageAlt, o
 		</main>
 		<Footer />
 		<ThemeToggle />
+		<script>
+			// コピーボタンの機能を追加
+			document.addEventListener('DOMContentLoaded', () => {
+				const copyButtons = document.querySelectorAll('.copy-button');
+				
+				copyButtons.forEach((button) => {
+					button.addEventListener('click', async (e) => {
+						const btn = e.currentTarget as HTMLButtonElement;
+						const codeBlockId = btn.dataset.codeBlockId;
+						
+						if (!codeBlockId) return;
+						
+						// 対応するコードブロックを見つける
+						const codeBlock = document.querySelector(`[data-code-block-id="${codeBlockId}"] code`);
+						
+						if (!codeBlock) return;
+						
+						try {
+							// コードテキストを取得してコピー
+							const code = codeBlock.textContent || '';
+							await navigator.clipboard.writeText(code);
+							
+							// 成功状態を表示
+							btn.classList.add('copied');
+							
+							// 2秒後に元に戻す
+							setTimeout(() => {
+								btn.classList.remove('copied');
+							}, 2000);
+						} catch (err) {
+							console.error('Failed to copy code:', err);
+						}
+					});
+				});
+			});
+		</script>
 	</body>
 </html>

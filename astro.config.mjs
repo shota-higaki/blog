@@ -4,6 +4,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
+import { rehypeCodeWrapper } from './src/utils/rehype-code-wrapper.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,7 +21,7 @@ export default defineConfig({
 		},
 		// 見出しに自動的にアンカーリンクを追加
 		remarkPlugins: [],
-		rehypePlugins: [],
+		rehypePlugins: [rehypeCodeWrapper],
 	},
 
 	vite: {

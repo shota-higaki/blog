@@ -1,0 +1,51 @@
+---
+import CopyButton from './CopyButton.astro';
+
+export interface Props {
+	lang?: string;
+	code: string;
+}
+
+const { lang = '', code } = Astro.props;
+
+// ユニークなIDを生成
+const id = Math.random().toString(36).substring(2, 9);
+---
+
+<div class="code-block-wrapper" data-code-block-id={id}>
+  {lang && <div class="code-language">{lang}</div>}
+  <CopyButton id={id} />
+  <pre><code>{code}</code></pre>
+</div>
+
+<style>
+  .code-block-wrapper {
+    position: relative;
+    margin-bottom: 1.25rem;
+  }
+
+  .code-language {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.25rem 0.75rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #e5e7eb;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 0.5rem 0 0.375rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    z-index: 5;
+  }
+
+  pre {
+    margin: 0;
+    position: relative;
+  }
+
+  code {
+    display: block;
+    overflow-x: auto;
+  }
+</style>
