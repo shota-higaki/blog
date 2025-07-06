@@ -38,7 +38,7 @@ test.describe('Blog functionality', () => {
 		await page.waitForURL('**/blog/articles/**');
 
 		// Check we're on the post page
-		const pageTitle = page.locator('h1');
+		const pageTitle = page.locator('h1.article-title').first();
 		await expect(pageTitle).toContainText(postTitle || '');
 
 		// Check post content is visible

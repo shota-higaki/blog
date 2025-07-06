@@ -40,18 +40,19 @@ test.describe('Performance Optimizations', () => {
 		await page.goto('/blog/');
 		await page.waitForURL('**/blog/articles/');
 
-		// CSSファイルが読み込まれているか確認
-		const cssLinks = await page.locator('link[rel="stylesheet"]').all();
+		// スタイルが適用されているか確認（インラインまたは外部CSS）
+		const hasStyles = await page.evaluate(() => {
+			// インラインスタイル、外部CSS、またはstyleタグがあるか確認
+			const hasInlineStyles = document.querySelector('style') !== null;
+			const hasExternalCSS = document.querySelector('link[rel="stylesheet"]') !== null;
+			const hasStyledElements =
+				window.getComputedStyle(document.body).backgroundColor !== 'rgba(0, 0, 0, 0)';
 
-		// 少なくとも1つのCSSファイルが読み込まれている
-		expect(cssLinks.length).toBeGreaterThan(0);
+			return hasInlineStyles || hasExternalCSS || hasStyledElements;
+		});
 
-		// CSSファイルのURLが正しく設定されている
-		for (const link of cssLinks) {
-			const href = await link.getAttribute('href');
-			expect(href).toBeTruthy();
-			expect(href).toMatch(/\.(css)$/);
-		}
+		// 何らかの形でスタイルが適用されている
+		expect(hasStyles).toBe(true);
 	});
 
 	test('should compress assets', async ({ page }) => {

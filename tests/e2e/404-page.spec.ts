@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test.describe.skip('404 Error Page', () => {
+test.describe('404 Error Page', () => {
 	test('should display custom 404 page for non-existent routes', async ({ page }) => {
 		// 存在しないページにアクセス
 		const response = await page.goto('/blog/non-existent-page');
@@ -13,12 +13,12 @@ test.describe.skip('404 Error Page', () => {
 		await expect(heading).toBeVisible();
 
 		// エラーメッセージが表示される
-		const message = page.locator('text=ページが見つかりませんでした');
+		const message = page.locator('text=Not Found');
 		await expect(message).toBeVisible();
 
-		// ホームに戻るリンクが存在する
-		const homeLink = page.locator('a:has-text("ホームに戻る")');
-		await expect(homeLink).toBeVisible();
+		// Articlesリンクが存在する
+		const articlesLink = page.locator('a:has-text("Articles")');
+		await expect(articlesLink).toBeVisible();
 	});
 
 	test('should have animated bracket design', async ({ page }) => {
@@ -29,23 +29,23 @@ test.describe.skip('404 Error Page', () => {
 		const svgCount = await svgElements.count();
 		expect(svgCount).toBeGreaterThan(0);
 
-		// アニメーションが適用されている
-		const animatedElement = page.locator('.animate-float-slow').first();
+		// アニメーションが適用されている（code-bracketクラス）
+		const animatedElement = page.locator('.code-bracket').first();
 		await expect(animatedElement).toBeVisible();
 	});
 
 	test('should navigate back to home from 404 page', async ({ page }) => {
 		await page.goto('/blog/non-existent-page');
 
-		// ホームに戻るリンクをクリック
-		const homeLink = page.locator('a:has-text("ホームに戻る")');
-		await homeLink.click();
+		// Articlesリンクをクリック
+		const articlesLink = page.locator('a:has-text("Articles")');
+		await articlesLink.click();
 
 		// 記事一覧ページにリダイレクトされる
 		await page.waitForURL('**/blog/articles/');
 
 		// 正常にページが表示される
-		const heading = page.locator('h1');
+		const heading = page.locator('h1.articles-title');
 		await expect(heading).toContainText('Articles');
 	});
 
