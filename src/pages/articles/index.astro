@@ -57,6 +57,24 @@ const posts = (await getCollection('blog'))
 			html.dark .group:focus {
 				outline-color: rgb(var(--accent-light));
 			}
+			
+			/* ダークモード時の記事カード背景色の強制適用 */
+			html.dark .dark-card {
+				background-color: rgb(31, 41, 55) !important; /* gray-800 equivalent */
+			}
+			
+			/* ダークモード時のテキスト色も確実に適用 */
+			html.dark .dark-card h2 {
+				color: rgb(243, 244, 246) !important; /* gray-100 equivalent */
+			}
+			
+			html.dark .dark-card p {
+				color: rgb(209, 213, 219) !important; /* gray-300 equivalent */
+			}
+			
+			html.dark .dark-card time {
+				color: rgb(156, 163, 175) !important; /* gray-400 equivalent */
+			}
 		</style>
 	</head>
 	<body class="bg-white dark:bg-zinc-900">
@@ -68,7 +86,7 @@ const posts = (await getCollection('blog'))
 				<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 					{
 						posts.map((post, index) => (
-							<article class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+							<article class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 dark-card">
 								<a href={`${import.meta.env.BASE_URL}/articles/${post.id}/`} class="group block -m-6 p-6 rounded-lg">
 									{post.data.heroImage && (
 										<Image 
