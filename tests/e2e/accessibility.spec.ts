@@ -22,6 +22,7 @@ test.describe('Accessibility', () => {
 		// Check with reduced rules to avoid task list label issues
 		await checkA11y(page, undefined, {
 			disableRules: ['label', 'color-contrast'], // Disable label check for task lists and color contrast
+			// biome-ignore lint/suspicious/noExplicitAny: Playwright options
 		} as any);
 	});
 

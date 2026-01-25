@@ -5,7 +5,7 @@ test.describe('Security Features', () => {
 		// GitHub Pagesではセキュリティヘッダーが自動設定されないため、
 		// CI環境（本番環境）でのテストは期待値を調整
 		const response = await page.goto('/blog/');
-		const headers = response?.headers() || {};
+		const _headers = response?.headers() || {};
 
 		if (process.env.CI) {
 			// CI環境では、GitHub Pagesがセキュリティヘッダーを設定しないため、
@@ -26,7 +26,7 @@ test.describe('Security Features', () => {
 		// X-Frame-Options
 		// expect(headers['x-frame-options']).toBe('DENY');
 
-		// X-Content-Type-Options  
+		// X-Content-Type-Options
 		// expect(headers['x-content-type-options']).toBe('nosniff');
 
 		// X-XSS-Protection
@@ -45,7 +45,7 @@ test.describe('Security Features', () => {
 		// const csp = headers['content-security-policy'];
 		// expect(csp).toBeTruthy();
 		// expect(csp).toContain("default-src 'self'");
-		
+
 		// 現在は基本的なテストのみ実行
 		expect(response?.status()).toBe(200);
 	});

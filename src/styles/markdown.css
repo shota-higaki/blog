@@ -348,6 +348,7 @@ html.dark .markdown-content .copy-button:focus {
 }
 
 .markdown-content .copy-button.copied .check-icon {
+	/* biome-ignore lint/complexity/noImportantStyles: Force display override */
 	display: block !important;
 }
 

@@ -5,7 +5,7 @@
  */
 
 import { cpus } from 'node:os';
-// @ts-ignore - parseArgs is available in Node.js 18.11.0+
+// @ts-expect-error - parseArgs is available in Node.js 18.11.0+
 import { parseArgs } from 'node:util';
 import { $ } from 'bun';
 
@@ -186,7 +186,7 @@ async function runTask(task: Task): Promise<TaskResult> {
 								// テストファイル実行中
 								const fileMatch = line.match(/✓\s+tests\/unit\/.*\.test\.ts\s+\((\d+)\s+tests?\)/);
 								if (fileMatch) {
-									testProgress.current += parseInt(fileMatch[1]);
+									testProgress.current += parseInt(fileMatch[1], 10);
 								}
 								// 合計テスト数
 								const totalMatch = line.match(/Test Files.*\((\d+)\)/);
@@ -196,8 +196,8 @@ async function runTask(task: Task): Promise<TaskResult> {
 								// 最終結果
 								const finalMatch = line.match(/Tests\s+(\d+)\s+passed/);
 								if (finalMatch) {
-									testProgress.current = parseInt(finalMatch[1]);
-									testProgress.total = parseInt(finalMatch[1]);
+									testProgress.current = parseInt(finalMatch[1], 10);
+									testProgress.total = parseInt(finalMatch[1], 10);
 								}
 							}
 
@@ -205,11 +205,11 @@ async function runTask(task: Task): Promise<TaskResult> {
 							if (task.name === 'test:e2e') {
 								const totalMatch = line.match(/Running (\d+) tests? using/);
 								if (totalMatch) {
-									testProgress.total = parseInt(totalMatch[1]);
+									testProgress.total = parseInt(totalMatch[1], 10);
 								}
 								const progressMatch = line.match(/\[(\d+)\/(\d+)\]/);
 								if (progressMatch) {
-									testProgress.current = parseInt(progressMatch[1]);
+									testProgress.current = parseInt(progressMatch[1], 10);
 								}
 							}
 
@@ -283,6 +283,7 @@ async function runTask(task: Task): Promise<TaskResult> {
 		};
 	} catch (error) {
 		const duration = Math.round((performance.now() - startTime) / 1000);
+		// biome-ignore lint/suspicious/noExplicitAny: Error handling
 		const err = error as any;
 
 		// プログレスバーをクリア

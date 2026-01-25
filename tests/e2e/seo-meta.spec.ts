@@ -74,7 +74,7 @@ test.describe('SEO and Meta Tags', () => {
 		let hasBlogPosting = false;
 		for (const script of jsonLdScripts) {
 			const content = await script.textContent();
-			if (content && content.includes('"@type":"BlogPosting"')) {
+			if (content?.includes('"@type":"BlogPosting"')) {
 				hasBlogPosting = true;
 				break;
 			}

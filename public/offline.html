@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -200,12 +201,13 @@
 
             .game-container {
                 height: calc(100vh - 250px);
+                /* biome-ignore lint/suspicious/noDuplicateProperties: Fallback for env() */
                 height: calc(100vh - 250px - env(safe-area-inset-bottom, 0px));
                 max-height: 500px;
                 border-radius: 5px;
                 margin-bottom: 10px;
             }
-            
+
             .offline-message {
                 position: fixed;
                 top: 10px;
@@ -222,7 +224,7 @@
                 font-size: 0.8rem;
                 margin-bottom: 5px;
             }
-            
+
             .instructions {
                 display: none;
             }
@@ -252,6 +254,7 @@
         @media (max-width: 480px) {
             .game-container {
                 height: calc(100vh - 220px);
+                /* biome-ignore lint/suspicious/noDuplicateProperties: Fallback for env() */
                 height: calc(100vh - 220px - env(safe-area-inset-bottom, 0px));
             }
 
@@ -279,6 +282,7 @@
 
             .game-container {
                 height: calc(100vh - 150px);
+                /* biome-ignore lint/suspicious/noDuplicateProperties: Fallback for env() */
                 height: calc(100vh - 150px - env(safe-area-inset-bottom, 0px));
             }
 
@@ -296,6 +300,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="offline-message">
         <h1>オフラインモード</h1>
@@ -332,7 +337,7 @@
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        
+
         // レスポンシブキャンバスサイズ
         function setCanvasSize() {
             const container = canvas.parentElement;
@@ -340,7 +345,7 @@
             canvas.width = rect.width;
             canvas.height = rect.height;
         }
-        
+
         setCanvasSize();
         window.addEventListener('resize', () => {
             setCanvasSize();
@@ -357,7 +362,7 @@
         let rainDrops = [];
         let gameStartTime = Date.now();
         let speedMultiplier = 1.0;
-        let player = {
+        const player = {
             x: canvas.width / 2 - 20,
             y: canvas.height - 60,
             width: window.innerWidth < 768 ? 50 : 40,
@@ -370,12 +375,12 @@
             'const', 'let', 'function', 'return', 'async', 'await',
             'class', 'import', 'export', '() =>', 'if', 'for'
         ];
-        
+
         const badPatterns = [
             'error', 'bug', 'null', 'undefined', 'NaN', 'throw',
             'crash', 'fail', '404', '500', 'panic', 'fatal'
         ];
-        
+
         const bonusPatterns = ['// TODO', '/* fix */', 'console.log'];
 
         // Rain drop class
@@ -386,7 +391,7 @@
                 this.baseSpeed = Math.random() * 1.5 + 1;
                 this.speed = this.baseSpeed * speedMultiplier;
                 this.opacity = Math.random() * 0.3 + 0.7;
-                
+
                 const rand = Math.random();
                 if (rand < 0.6) {
                     this.text = goodPatterns[Math.floor(Math.random() * goodPatterns.length)];
@@ -408,7 +413,7 @@
 
             update() {
                 this.y += this.speed;
-                
+
                 // Add slight horizontal drift
                 this.x += Math.sin(this.y * 0.01) * 0.5;
             }
@@ -453,13 +458,13 @@
         // タッチコントロール
         const leftBtn = document.getElementById('leftBtn');
         const rightBtn = document.getElementById('rightBtn');
-        let touchInterval = null;
+        const _touchInterval = null;
         let touchDirection = null;
 
         function startTouch(direction) {
             touchDirection = direction;
-            keys['Arrow' + direction] = true;
-            
+            keys[`Arrow${direction}`] = true;
+
             // ボタンの視覚的フィードバック
             const btn = direction === 'Left' ? leftBtn : rightBtn;
             btn.classList.add('pressed');
@@ -467,7 +472,7 @@
 
         function stopTouch() {
             if (touchDirection) {
-                keys['Arrow' + touchDirection] = false;
+                keys[`Arrow${touchDirection}`] = false;
                 touchDirection = null;
             }
             leftBtn.classList.remove('pressed');
@@ -500,10 +505,10 @@
 
         // Update player position
         function updatePlayer() {
-            if (keys['ArrowLeft'] && player.x > 0) {
+            if (keys.ArrowLeft && player.x > 0) {
                 player.x -= player.speed;
             }
-            if (keys['ArrowRight'] && player.x < canvas.width - player.width) {
+            if (keys.ArrowRight && player.x < canvas.width - player.width) {
                 player.x += player.speed;
             }
         }
@@ -566,10 +571,10 @@
                     } else if (drop.type === 'bonus') {
                         score += 50;
                     }
-                    
+
                     rainDrops.splice(i, 1);
                     updateUI();
-                    
+
                     if (lives <= 0) {
                         gameOver();
                     }
@@ -582,10 +587,10 @@
         // Draw game
         function draw() {
             drawBackground();
-            
+
             // Draw rain drops
-            rainDrops.forEach(drop => drop.draw());
-            
+            rainDrops.forEach(drop => { drop.draw() });
+
             drawPlayer();
             drawSpeedIndicator();
         }
@@ -601,7 +606,7 @@
             gameRunning = false;
             document.getElementById('finalScore').textContent = score;
             document.getElementById('gameOver').style.display = 'block';
-            
+
             // グローバルに関数を公開（テスト用）
             window.lives = lives;
             window.gameOver = gameOver;
@@ -640,4 +645,5 @@
         window.gameOver = gameOver;
     </script>
 </body>
+
 </html>

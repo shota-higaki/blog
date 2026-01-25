@@ -77,9 +77,13 @@ img {
 	*,
 	*::before,
 	*::after {
+		/* biome-ignore lint/complexity/noImportantStyles: Reset animation for reduced motion */
 		animation-duration: 0.01ms !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Reset animation for reduced motion */
 		animation-iteration-count: 1 !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Reset transition for reduced motion */
 		transition-duration: 0.01ms !important;
+		/* biome-ignore lint/complexity/noImportantStyles: Reset scroll behavior for reduced motion */
 		scroll-behavior: auto !important;
 	}
 }
@@ -110,6 +114,7 @@ pre {
 
 /* Shikiのコメントスタイルを上書き */
 .astro-code span[style*="color:#6A737D"] {
+	/* biome-ignore lint/complexity/noImportantStyles: Override Shiki themes */
 	color: #8b949e !important;
 }
 

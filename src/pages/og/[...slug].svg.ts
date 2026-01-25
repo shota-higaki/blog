@@ -10,6 +10,7 @@ export async function getStaticPaths() {
 }
 
 export const GET: APIRoute = async ({ props }) => {
+	// biome-ignore lint/suspicious/noExplicitAny: API types
 	const { entry } = props as { entry: any };
 	const { title, description } = entry.data;
 

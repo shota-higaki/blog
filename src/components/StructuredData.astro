@@ -27,6 +27,7 @@ const {
 	articleSection = 'Technology',
 } = Astro.props;
 
+// biome-ignore lint/suspicious/noExplicitAny: Structured data build-up
 let _structuredData: any = {};
 
 // WebSite構造化データ
@@ -143,6 +144,12 @@ if (type === 'organization') {
 }
 ---
 
-{Object.keys(_structuredData).length > 0 && (
-	<script type="application/ld+json" is:inline set:html={JSON.stringify(_structuredData)} />
-)}
+{
+	Object.keys(_structuredData).length > 0 && (
+		<script
+			type="application/ld+json"
+			is:inline
+			set:html={JSON.stringify(_structuredData)}
+		/>
+	)
+}

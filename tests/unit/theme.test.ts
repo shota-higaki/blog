@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { mockLocalStorage, mockMatchMedia } from '../utils/test-helpers';
 
 describe('Theme Toggle Logic', () => {

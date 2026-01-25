@@ -97,6 +97,7 @@ test.describe('Performance Optimizations', () => {
 		expect(manifestLink).toContain('site.webmanifest');
 
 		// マニフェストファイルが存在する
+		// biome-ignore lint/style/noNonNullAssertion: Known existence in test context
 		const manifestResponse = await page.request.get(manifestLink!);
 		expect(manifestResponse.status()).toBe(200);
 

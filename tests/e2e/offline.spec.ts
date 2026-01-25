@@ -149,9 +149,9 @@ test.describe('Offline Page and Service Worker', () => {
 
 		// ライフを0にしてゲームオーバーを発生させる
 		await page.evaluate(() => {
-			// @ts-ignore
+			// @ts-expect-error
 			window.lives = 0;
-			// @ts-ignore
+			// @ts-expect-error
 			window.gameOver();
 		});
 

@@ -1,6 +1,7 @@
 import { vi } from 'vitest';
 
 // Astro.propsをモックする関数
+// biome-ignore lint/suspicious/noExplicitAny: Mocking generic props
 export function mockAstroProps(props: Record<string, any>) {
 	return {
 		props,
@@ -31,7 +32,9 @@ export function mockLocalStorage() {
 			delete storage[key];
 		}),
 		clear: vi.fn(() => {
-			Object.keys(storage).forEach((key) => delete storage[key]);
+			Object.keys(storage).forEach((key) => {
+				delete storage[key];
+			});
 		}),
 		length: 0,
 		key: vi.fn((index: number) => Object.keys(storage)[index] || null),
