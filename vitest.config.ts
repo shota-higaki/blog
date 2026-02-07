@@ -22,5 +22,5 @@ export default getViteConfig({
 		},
 		reporters: ['default'],
 	},
-	// biome-ignore lint/suspicious/noExplicitAny: vite version mismatch between astro and vitest
+	// biome-ignore lint/suspicious/noExplicitAny: astro's getViteConfig type doesn't include vitest's test property
 } as any);
