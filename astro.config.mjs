@@ -25,7 +25,6 @@ export default defineConfig({
 	},
 
 	vite: {
-		// @ts-expect-error - vite version mismatch between @tailwindcss/vite and astro's internal vite
 		plugins: [tailwindcss()],
 		build: {
 			// CSSコード分割を無効化して1つのファイルに
