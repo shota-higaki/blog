@@ -7,6 +7,7 @@
 		":timezone(Asia/Tokyo)",
 		"schedule:weekends"
 	],
+	"platformAutomerge": true,
 	"packageRules": [
 		{
 			"description": "Automatically merge minor and patch updates",
@@ -14,24 +15,35 @@
 			"automerge": true
 		},
 		{
+			"description": "Automatically merge pin and digest updates",
+			"matchUpdateTypes": ["pin", "digest"],
+			"automerge": true
+		},
+		{
 			"description": "Group Astro-related packages",
-			"matchPackagePatterns": ["^@astrojs/", "^astro$"],
+			"matchPackageNames": ["@astrojs/**", "astro"],
 			"groupName": "Astro packages"
 		},
 		{
 			"description": "Group testing packages",
-			"matchPackagePatterns": ["^@playwright/", "^playwright$"],
+			"matchPackageNames": ["@playwright/**", "playwright"],
 			"groupName": "Testing packages"
 		},
 		{
 			"description": "Group linting and formatting packages",
-			"matchPackagePatterns": ["^@biomejs/", "^biome$"],
+			"matchPackageNames": ["@biomejs/**", "biome"],
 			"groupName": "Linting and formatting packages"
 		},
 		{
 			"description": "Pin GitHub Actions by hash",
 			"matchManagers": ["github-actions"],
 			"pinDigests": true
+		},
+		{
+			"description": "Automerge GitHub Actions minor and patch updates",
+			"matchManagers": ["github-actions"],
+			"matchUpdateTypes": ["minor", "patch", "digest"],
+			"automerge": true
 		}
 	],
 	"labels": ["dependencies"],
