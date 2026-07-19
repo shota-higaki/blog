@@ -278,11 +278,6 @@ html.dark .markdown-content hr {
 	margin-bottom: 1.25rem;
 }
 
-.markdown-content .code-block-wrapper:hover .copy-button,
-.markdown-content .copy-button:focus {
-	opacity: 1;
-}
-
 .markdown-content .code-language {
 	position: absolute;
 	top: 0;
@@ -311,6 +306,11 @@ html.dark .markdown-content hr {
 	transition: all 0.2s ease;
 	opacity: 0;
 	z-index: 10;
+}
+
+.markdown-content .code-block-wrapper:hover .copy-button,
+.markdown-content .copy-button:focus {
+	opacity: 1;
 }
 
 .markdown-content .copy-button:hover {
