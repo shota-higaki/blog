@@ -1,5 +1,6 @@
 // @ts-check
 
+import { unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
@@ -19,9 +20,10 @@ export default defineConfig({
 			theme: 'github-dark',
 			wrap: true,
 		},
-		// 見出しに自動的にアンカーリンクを追加
-		remarkPlugins: [],
-		rehypePlugins: [rehypeCodeWrapper],
+		// 既存のRehypeプラグインをUnifiedパイプラインで実行
+		processor: unified({
+			rehypePlugins: [rehypeCodeWrapper],
+		}),
 	},
 
 	vite: {

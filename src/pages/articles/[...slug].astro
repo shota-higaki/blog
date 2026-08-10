@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 
 export async function getStaticPaths() {
@@ -11,10 +11,11 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 
 // 記事専用のOG画像URL
-const ogImageUrl = new URL(`/blog/og/${entry.id}.svg`, Astro.site).href;
+const ogImageId = entry.id.replace(/\.(?:md|mdx)$/, '');
+const ogImageUrl = new URL(`/blog/og/${ogImageId}.svg`, Astro.site).href;
 ---
 
 <BlogPost {...entry.data} ogImage={ogImageUrl}>
