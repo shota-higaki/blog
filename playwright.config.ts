@@ -24,7 +24,7 @@ export default defineConfig({
 	webServer: process.env.CI
 		? undefined
 		: {
-				command: 'bun run build && bun run preview',
+				command: 'bun run build && ASTRO_PREVIEW_BACKGROUND=0 bun run preview',
 				port: 4321,
 				reuseExistingServer: !process.env.CI,
 			},
